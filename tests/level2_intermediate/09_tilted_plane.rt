@@ -1,0 +1,7 @@
+# Level 2 Test 09: Tilted plane
+# Expected: Diagonal plane surface
+A 0.2 255,255,255
+C 0,5,-10 0,-0.3,1 70
+L 0,15,0 0.8 255,255,255
+pl 0,0,5 0,0.707,-0.707 180,180,255
+sp 0,3,3 1.5 255,100,0

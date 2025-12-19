@@ -1,0 +1,7 @@
+# Level 1 Test 05: Simple shadow test
+# Expected: Sphere casting shadow on plane
+A 0.1 255,255,255
+C 0,5,-10 0,-0.2,1 70
+L 5,10,-5 0.8 255,255,255
+pl 0,-2,0 0,1,0 200,200,200
+sp 0,1,5 2 255,100,100

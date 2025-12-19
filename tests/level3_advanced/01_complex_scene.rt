@@ -1,0 +1,22 @@
+# Level 3 Test 01: Complex scene with many objects
+# Expected: Full scene with multiple shapes and shadows
+A 0.15 255,255,255
+C 0,8,-20 0,-0.2,1 70
+L 10,20,-10 0.9 255,255,255
+
+# Floor
+pl 0,-3,0 0,1,0 100,100,100
+
+# Back wall
+pl 0,0,25 0,0,-1 80,80,100
+
+# Multiple spheres
+sp -6,0,5 2 255,0,0
+sp -3,0,8 2 255,128,0
+sp 0,0,5 2 255,255,0
+sp 3,0,8 2 0,255,0
+sp 6,0,5 2 0,0,255
+
+# Multiple cylinders
+cy -5,-3,12 0,1,0 1 5 200,100,200
+cy 5,-3,12 0,1,0 1 5 100,200,200

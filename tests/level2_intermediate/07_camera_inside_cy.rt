@@ -1,0 +1,7 @@
+# Level 2 Test 07: Camera inside cylinder
+# Expected: View from inside cylinder
+A 0.3 255,255,255
+C 0,0,0 0,0,1 90
+L 0,10,0 0.7 255,255,255
+cy 0,-5,0 0,1,0 20 20 100,200,255
+sp 0,0,15 3 255,0,0

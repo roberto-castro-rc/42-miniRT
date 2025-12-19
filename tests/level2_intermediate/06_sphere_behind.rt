@@ -1,0 +1,7 @@
+# Level 2 Test 06: Sphere behind camera (should not be visible)
+# Expected: Only front sphere visible
+A 0.2 255,255,255
+C 0,0,0 0,0,1 70
+L 5,10,0 0.8 255,255,255
+sp 0,0,-5 2 255,0,0
+sp 0,0,5 2 0,255,0

@@ -1,0 +1,6 @@
+# Level 1 Test 03: Single cylinder - basic rendering
+# Expected: Blue vertical cylinder
+A 0.2 255,255,255
+C 0,2,-8 0,0,1 70
+L 5,10,-5 0.7 255,255,255
+cy 0,0,5 0,1,0 2 4 0,0,255

@@ -1,0 +1,8 @@
+# Level 2 Test 01: Multiple spheres
+# Expected: Three colored spheres in a row
+A 0.2 255,255,255
+C 0,2,-10 0,0,1 90
+L 0,10,-5 0.8 255,255,255
+sp -4,0,5 2 255,0,0
+sp 0,0,5 2 0,255,0
+sp 4,0,5 2 0,0,255

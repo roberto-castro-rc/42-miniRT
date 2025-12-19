@@ -1,0 +1,6 @@
+# Level 1 Test 02: Single plane - basic rendering
+# Expected: Gray horizontal plane
+A 0.2 255,255,255
+C 0,5,0 0,-0.5,0.5 70
+L 0,10,0 0.7 255,255,255
+pl 0,0,0 0,1,0 128,128,128

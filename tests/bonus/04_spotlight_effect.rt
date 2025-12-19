@@ -1,0 +1,9 @@
+# Bonus Test 04: Spotlight effect simulation
+# Expected: Central bright area with falloff
+A 0.02 255,255,255
+C 0,5,-15 0,-0.1,1 70
+
+L 0,12,5 1.0 255,255,200
+
+pl 0,-2,0 0,1,0 100,100,100
+sp 0,1,5 2 180,180,180
