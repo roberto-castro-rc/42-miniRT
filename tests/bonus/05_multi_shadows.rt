@@ -1,0 +1,13 @@
+# Bonus Test 05: Complex shadows with multiple lights
+# Expected: Multiple overlapping soft-looking shadows
+A 0.1 255,255,255
+C 0,8,-18 0,-0.2,1 70
+
+L -8,12,-8 0.5 255,255,255
+L 8,12,-8 0.5 255,255,255
+
+pl 0,-2,0 0,1,0 220,220,220
+
+sp -2,1,5 2 255,100,100
+sp 2,1,8 2 100,255,100
+cy 0,-2,12 0,1,0 1.5 4 100,100,255

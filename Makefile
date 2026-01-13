@@ -73,4 +73,82 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re libmlx libft
+# =============================================================================
+# Test rules
+# =============================================================================
+
+# Run all tests
+test: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh all
+
+# Run Level 1 tests (basic)
+test1: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh level1
+
+# Run Level 2 tests (intermediate)
+test2: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh level2
+
+# Run Level 3 tests (advanced)
+test3: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh level3
+
+# Run error handling tests
+test-error: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh error
+
+# Run bonus tests (multiple lights)
+test-bonus: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh bonus
+
+# Run edge case tests
+test-edge: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh edge
+
+# Interactive test menu
+test-menu: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh
+
+# Quick visual test
+test-visual: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh visual
+
+# Run specific test file
+run: $(NAME)
+	@if [ -z "$(SCENE)" ]; then \
+		echo "$(RED)Usage: make run SCENE=path/to/scene.rt$(RESET)"; \
+	else \
+		./$(NAME) $(SCENE); \
+	fi
+
+# Run with valgrind (memory check)
+valgrind: $(NAME)
+	@if [ -z "$(SCENE)" ]; then \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) scenes/simple.rt; \
+	else \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(SCENE); \
+	fi
+
+# Quick test scenes
+demo: $(NAME)
+	@echo "$(GREEN)Running demo scenes...$(RESET)"
+	@./$(NAME) tests/level1_basic/01_single_sphere.rt
+
+demo2: $(NAME)
+	@echo "$(GREEN)Running intermediate demo...$(RESET)"
+	@./$(NAME) tests/level2_intermediate/03_mixed_objects.rt
+
+demo3: $(NAME)
+	@echo "$(GREEN)Running advanced demo...$(RESET)"
+	@./$(NAME) tests/level3_advanced/02_snowman.rt
+
+.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual run valgrind demo demo2 demo3

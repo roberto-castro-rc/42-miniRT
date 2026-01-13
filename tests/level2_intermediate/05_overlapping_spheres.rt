@@ -1,0 +1,7 @@
+# Level 2 Test 05: Overlapping spheres
+# Expected: Two spheres partially overlapping
+A 0.2 255,255,255
+C 0,0,-10 0,0,1 70
+L 5,10,-10 0.8 255,255,255
+sp -1,0,5 2 255,0,0
+sp 1,0,5 2 0,0,255

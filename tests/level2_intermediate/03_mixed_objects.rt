@@ -1,0 +1,8 @@
+# Level 2 Test 03: Mixed objects
+# Expected: Sphere, plane and cylinder together
+A 0.2 255,255,255
+C 0,3,-10 0,-0.1,1 80
+L 5,10,-5 0.8 255,255,255
+pl 0,-2,0 0,1,0 150,150,150
+sp -3,0,5 2 255,100,100
+cy 3,-2,5 0,1,0 1.5 4 100,100,255

@@ -1,0 +1,7 @@
+# Level 2 Test 04: Tilted cylinder
+# Expected: Cylinder at 45 degree angle
+A 0.2 255,255,255
+C 0,2,-10 0,0,1 70
+L 5,10,-5 0.7 255,255,255
+pl 0,-2,0 0,1,0 128,128,128
+cy 0,-2,5 0.707,0.707,0 2 6 255,200,0

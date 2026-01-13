@@ -1,0 +1,6 @@
+# Level 1 Test 06: Narrow FOV test (30 degrees)
+# Expected: Zoomed in view of sphere
+A 0.2 255,255,255
+C 0,0,-10 0,0,1 30
+L 0,10,0 0.7 255,255,255
+sp 0,0,5 2 255,255,0

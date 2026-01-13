@@ -1,0 +1,6 @@
+# Level 2 Test 10: Light at edge position
+# Expected: Strong side lighting creating contrast
+A 0.1 255,255,255
+C 0,0,-8 0,0,1 70
+L -20,0,0 1.0 255,255,255
+sp 0,0,5 3 200,200,200

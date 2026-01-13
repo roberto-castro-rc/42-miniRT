@@ -1,0 +1,5 @@
+# Error Test 16: Invalid light brightness (over 1.0)
+A 0.2 255,255,255
+C 0,0,0 0,0,1 70
+L 0,5,0 1.5 255,255,255
+sp 0,0,5 2 255,0,0
