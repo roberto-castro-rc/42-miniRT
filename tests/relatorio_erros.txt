@@ -1,0 +1,148 @@
+================================================================================
+                    RELATÓRIO DE ERROS - MINIRT TEST SUITE
+                              Data: 13/01/2026
+================================================================================
+
+RESUMO GERAL
+-------------
+Total de testes: 69
+Passou: 57
+Falhou: 12
+
+================================================================================
+                           ANÁLISE DETALHADA DOS ERROS
+================================================================================
+
+------------------------------------------------------------------------------
+CATEGORIA 1: ERROS DE CENA (Vetor de orientação da câmera não normalizado)
+------------------------------------------------------------------------------
+Quantidade: 10 erros
+Causa raiz: Os arquivos .rt contêm vetores de direção da câmera que NÃO estão
+            normalizados (comprimento != 1). O parser exige vetores unitários.
+
+Origem do erro: CENA (arquivos .rt)
+Solução: Normalizar os vetores de direção da câmera em cada arquivo.
+
+Lista de arquivos afetados:
+
+1. tests/level1_basic/02_single_plane.rt
+   Linha atual:    C 0,5,0 0,-0.5,0.5 70
+   Vetor:          (0, -0.5, 0.5) → magnitude = √(0.25+0.25) = 0.707
+   Correção:       C 0,5,0 0,-0.707107,0.707107 70
+
+2. tests/level1_basic/05_simple_shadows.rt
+   Linha atual:    C 0,5,-10 0,-0.2,1 70
+   Vetor:          (0, -0.2, 1) → magnitude = √(0.04+1) = 1.0198
+   Correção:       C 0,5,-10 0,-0.196116,0.980581 70
+
+3. tests/level2_intermediate/08_multiple_shadows.rt
+   Linha atual:    C 0,5,-12 0,-0.2,1 80
+   Vetor:          (0, -0.2, 1) → magnitude = 1.0198
+   Correção:       C 0,5,-12 0,-0.196116,0.980581 80
+
+4. tests/level2_intermediate/09_tilted_plane.rt
+   Linha atual:    C 0,5,-10 0,-0.3,1 70
+   Vetor:          (0, -0.3, 1) → magnitude = √(0.09+1) = 1.044
+   Correção:       C 0,5,-10 0,-0.287348,0.957826 70
+
+5. tests/level3_advanced/01_complex_scene.rt
+   Linha atual:    C 0,8,-20 0,-0.2,1 70
+   Vetor:          (0, -0.2, 1) → magnitude = 1.0198
+   Correção:       C 0,8,-20 0,-0.196116,0.980581 70
+
+6. tests/level3_advanced/03_cylinder_forest.rt
+   Linha atual:    C 0,8,-20 0,-0.15,1 80
+   Vetor:          (0, -0.15, 1) → magnitude = √(0.0225+1) = 1.0112
+   Correção:       C 0,8,-20 0,-0.148352,0.988936 80
+
+7. tests/level3_advanced/04_sphere_grid.rt
+   Linha atual:    C 0,10,-20 0,-0.3,1 70
+   Vetor:          (0, -0.3, 1) → magnitude = 1.044
+   Correção:       C 0,10,-20 0,-0.287348,0.957826 70
+
+8. tests/level3_advanced/06_cylinder_caps.rt
+   Linha atual:    C 0,10,-15 0,-0.5,1 70
+   Vetor:          (0, -0.5, 1) → magnitude = √(0.25+1) = 1.118
+   Correção:       C 0,10,-15 0,-0.447214,0.894427 70
+
+9. tests/level3_advanced/10_table_scene.rt
+   Linha atual:    C 0,6,-12 0,-0.2,1 70
+   Vetor:          (0, -0.2, 1) → magnitude = 1.0198
+   Correção:       C 0,6,-12 0,-0.196116,0.980581 70
+
+10. tests/edge_cases/12_disk_cylinder.rt
+    Linha atual:   C 0,5,-10 0,-0.3,1 70
+    Vetor:         (0, -0.3, 1) → magnitude = 1.044
+    Correção:      C 0,5,-10 0,-0.287348,0.957826 70
+
+------------------------------------------------------------------------------
+CATEGORIA 2: ERROS DE PROJETO (Validação de parsing incompleta)
+------------------------------------------------------------------------------
+Quantidade: 2 erros
+Causa raiz: O parser do miniRT não valida corretamente alguns casos de erro.
+
+2.1. tests/error_tests/13_invalid_fov_zero.rt
+     Conteúdo:     C 0,0,0 0,0,1 0   (FOV = 0)
+     Esperado:     Erro de FOV inválido (FOV deve ser 0 < FOV <= 180)
+     Atual:        Programa abre sem erro
+
+     Origem do erro: PROJETO
+     Problema: O parser aceita FOV = 0, mas isso é inválido pois não gera
+               nenhuma projeção visível. A validação deveria rejeitar FOV <= 0.
+
+     Solução no código:
+       Em src/parser/parse_elements.c ou src/parser/validate.c, adicionar
+       validação: if (fov <= 0 || fov > 180) return error;
+
+2.2. tests/error_tests/22_extra_params.rt
+     Conteúdo:     A 0.2 255,255,255 extra
+     Esperado:     Erro de parâmetros extras
+     Atual:        Programa abre sem erro (ignora "extra")
+
+     Origem do erro: PROJETO
+     Problema: O parser não valida se há tokens extras após os parâmetros
+               esperados. Ele simplesmente ignora qualquer coisa adicional.
+
+     Solução no código:
+       Após fazer o parsing de cada elemento, verificar se ainda há tokens
+       restantes na linha. Se houver, retornar erro.
+
+------------------------------------------------------------------------------
+                              CLASSIFICAÇÃO FINAL
+------------------------------------------------------------------------------
+
+| Arquivo/Teste                          | Origem do Erro      |
+|----------------------------------------|---------------------|
+| 02_single_plane.rt                     | CENA                |
+| 05_simple_shadows.rt                   | CENA                |
+| 08_multiple_shadows.rt                 | CENA                |
+| 09_tilted_plane.rt                     | CENA                |
+| 01_complex_scene.rt                    | CENA                |
+| 03_cylinder_forest.rt                  | CENA                |
+| 04_sphere_grid.rt                      | CENA                |
+| 06_cylinder_caps.rt                    | CENA                |
+| 10_table_scene.rt                      | CENA                |
+| 12_disk_cylinder.rt                    | CENA                |
+| 13_invalid_fov_zero.rt                 | PROJETO             |
+| 22_extra_params.rt                     | PROJETO             |
+
+------------------------------------------------------------------------------
+                              AÇÕES RECOMENDADAS
+------------------------------------------------------------------------------
+
+1. CORREÇÃO IMEDIATA (Cenas):
+   Normalizar os vetores de direção da câmera nos 10 arquivos listados acima.
+   Isso pode ser feito manualmente ou com um script.
+
+2. CORREÇÃO NO PROJETO (Opcional/Futuro):
+   a) Adicionar validação para FOV <= 0 no parser
+   b) Adicionar verificação de tokens extras após parsing de cada elemento
+
+3. ALTERNATIVA PARA CENAS:
+   Se desejar manter os arquivos .rt como estão (mais intuitivos para
+   usuários), o projeto poderia normalizar automaticamente os vetores
+   de direção durante o parsing, em vez de exigir normalização prévia.
+
+================================================================================
+                              FIM DO RELATÓRIO
+================================================================================
