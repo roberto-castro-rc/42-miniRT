@@ -7,32 +7,32 @@ CFLAGS		= -Wall -Wextra -Werror -I./includes -I./lib/libft -I./lib/MLX42/include
 LDFLAGS		= -L./lib/libft -lft -L./lib/MLX42/build -lmlx42 -lglfw -lm -ldl -pthread
 
 # Source files
-SRCS		= src/main.c \
-			  src/init_scene.c \
-			  src/cleanup.c \
-			  src/error.c \
-			  src/parse_scene.c \
-			  src/parse_elements.c \
-			  src/parse_objects.c \
-			  src/parse_sphere.c \
-			  src/parse_utils.c \
-			  src/validate.c \
-			  src/vec_basic.c \
-			  src/vec_products.c \
-			  src/vec_utils.c \
-			  src/render.c \
-			  src/ray_trace.c \
-			  src/camera.c \
-			  src/intersect_sphere.c \
-			  src/intersect_plane.c \
-			  src/intersect_cylinder.c \
-			  src/cylinder_utils.c \
-			  src/lighting.c \
-			  src/shadows.c \
-			  src/color.c \
-			  src/mlx_init.c \
-			  src/mlx_events.c \
-			  src/mlx_utils.c
+SRCS		= src/core/main.c \
+		  src/scene/init_scene.c \
+		  src/core/cleanup.c \
+		  src/core/error.c \
+		  src/parser/parse_scene.c \
+		  src/parser/parse_elements.c \
+		  src/parser/parse_objects.c \
+		  src/parser/parse_sphere.c \
+		  src/parser/parse_utils.c \
+		  src/parser/validate.c \
+		  src/math/vec_basic.c \
+		  src/math/vec_products.c \
+		  src/math/vec_utils.c \
+		  src/render/render.c \
+		  src/render/ray_trace.c \
+		  src/scene/camera.c \
+		  src/shapes/intersect_sphere.c \
+		  src/shapes/intersect_plane.c \
+		  src/shapes/intersect_cylinder.c \
+		  src/shapes/cylinder_utils.c \
+		  src/render/lighting.c \
+		  src/render/shadows.c \
+		  src/utils/color.c \
+		  src/mlx/mlx_init.c \
+		  src/mlx/mlx_events.c \
+		  src/mlx/mlx_utils.c
 
 OBJS		= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
