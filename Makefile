@@ -1,5 +1,7 @@
 NAME		= miniRT
 
+OBJ_DIR		= obj
+
 CC			= cc
 CFLAGS		= -Wall -Wextra -Werror -I./includes -I./lib/libft -I./lib/MLX42/include
 LDFLAGS		= -L./lib/libft -lft -L./lib/MLX42/build -lmlx42 -lglfw -lm -ldl -pthread
@@ -32,7 +34,7 @@ SRCS		= src/main.c \
 			  src/mlx_events.c \
 			  src/mlx_utils.c
 
-OBJS		= $(SRCS:.c=.o)
+OBJS		= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
 # Colors
 GREEN		= \033[0;32m
@@ -56,14 +58,16 @@ $(NAME): $(OBJS)
 	@$(CC) $(OBJS) $(LDFLAGS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) created successfully!$(RESET)"
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	@echo "Compiling $<..."
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
-	@rm -f $(OBJS)
+	@rm -rf $(OBJ_DIR)/*
 	@make -C lib/libft clean
+
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"

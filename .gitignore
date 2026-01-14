@@ -1,0 +1,10 @@
+# Ignore build artifacts
+/miniRT
+obj/
+*.o
+*.a
+
+# Editor / OS files
+.DS_Store
+*.swp
+*~
