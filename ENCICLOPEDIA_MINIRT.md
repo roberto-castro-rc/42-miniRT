@@ -167,11 +167,11 @@ typedef struct s_scene
     // Elementos únicos (só pode haver um de cada)
     t_ambient       ambient;     // Luz ambiente global
     t_camera        camera;      // Câmera (ponto de vista)
-    
+
     // Fontes de luz (podem ser múltiplas)
     t_light         *lights;     // Array de luzes
     int             light_count;
-    
+
     // Objetos da cena
     t_sphere        *spheres;
     int             sphere_count;
@@ -179,7 +179,7 @@ typedef struct s_scene
     int             plane_count;
     t_cylinder      *cylinders;
     int             cylinder_count;
-    
+
     // MLX
     mlx_t           *mlx;        // Contexto MLX
     mlx_image_t     *image;      // Imagem a ser renderizada
@@ -251,7 +251,7 @@ Um vetor representa uma direção e magnitude no espaço 3D:
 typedef struct s_vector
 {
     double  x;  // Componente horizontal
-    double  y;  // Componente vertical  
+    double  y;  // Componente vertical
     double  z;  // Componente de profundidade
 }   t_vector;
 ```
@@ -299,7 +299,7 @@ t_vector vec_subtract(t_vector a, t_vector b)
       /       A + B             /   ▲
      ●──────▶────────▶         ●────│────▶ A
      │       A                      │
-     │                              
+     │
 ```
 
 ### 3.2.2 Produto Escalar (Dot Product)
@@ -480,37 +480,37 @@ t_hit intersect_sphere(t_ray ray, t_sphere sp, double closest)
 
     // OC = origem do raio - centro da esfera
     oc = vec_subtract(ray.origin, sp.center);
-    
+
     // a = D·D (como D é normalizado, a ≈ 1)
     abc[0] = vec_dot(ray.direction, ray.direction);
-    
+
     // b = 2(OC·D)
     abc[1] = 2.0 * vec_dot(oc, ray.direction);
-    
+
     // c = OC·OC - r²
     abc[2] = vec_dot(oc, oc) - sp.radius * sp.radius;
-    
+
     // Δ = b² - 4ac
     discriminant = abc[1] * abc[1] - 4.0 * abc[0] * abc[2];
-    
+
     if (discriminant < 0)
         return (create_no_hit());  // Sem intersecção
-    
+
     // Usa a fórmula de Bhaskara para encontrar t
     t = solve_quadratic(abc[0], abc[1], discriminant);
-    
+
     if (t < 0 || t >= closest)
         return (create_no_hit());
-    
+
     // Preenche informações do hit
     hit.hit = 1;
     hit.t = t;
     hit.point = ray_at(ray, t);  // P = O + t*D
-    
+
     // Normal: aponta do centro para fora
     hit.normal = vec_normalize(vec_subtract(hit.point, sp.center));
     hit.color = sp.color;
-    
+
     return (hit);
 }
 ```
@@ -554,19 +554,19 @@ t_hit intersect_plane(t_ray ray, t_plane pl, double closest)
     // t = (P₀ - O) · N / (D · N)
     diff = vec_subtract(pl.point, ray.origin);
     t = vec_dot(diff, pl.normal) / denom;
-    
+
     if (t < EPSILON || t >= closest)
         return (create_no_hit());
-    
+
     hit.hit = 1;
     hit.t = t;
     hit.point = ray_at(ray, t);
     hit.normal = pl.normal;
-    
+
     // Garante que a normal aponta para o lado correto
     if (vec_dot(hit.normal, ray.direction) > 0)
         hit.normal = vec_negate(hit.normal);
-    
+
     hit.color = pl.color;
     return (hit);
 }
@@ -620,13 +620,13 @@ int check_body_hit(t_ray ray, t_cylinder cy, double t, double cl)
 
     if (t < EPSILON || t >= cl)
         return (0);
-    
+
     hit_point = ray_at(ray, t);
     to_hit = vec_subtract(hit_point, cy.center);
-    
+
     // Projeta no eixo para verificar altura
     h = vec_dot(to_hit, cy.axis);
-    
+
     // Deve estar entre 0 e altura do cilindro
     return (h >= 0.0 && h <= cy.height);
 }
@@ -814,12 +814,12 @@ t_hit find_closest_hit(t_scene *scene, t_ray ray)
 
     closest.hit = 0;
     closest.t = INFINITY;  // Começa com "infinitamente longe"
-    
+
     // Verifica todos os objetos
     check_spheres(scene, ray, &closest);
     check_planes(scene, ray, &closest);
     check_cylinders(scene, ray, &closest);
-    
+
     return (closest);
 }
 ```
@@ -848,7 +848,7 @@ t_hit intersect_sphere(t_ray ray, t_sphere sp, double closest)
 {
     // ...
     t = solve_quadratic(abc[0], abc[1], discriminant);
-    
+
     // Ignora se for mais longe que o mais próximo atual
     if (t < 0 || t >= closest)
         return (create_no_hit());
@@ -876,7 +876,7 @@ A **normal** é o vetor perpendicular à superfície em um ponto. Ela é crucial
                     Superfície
 
     dot(N, luz_dir) = cos(θ)
-    
+
     Se θ pequeno: superfície bem iluminada
     Se θ grande: superfície escura
     Se θ > 90°: superfície de costas para a luz
@@ -904,12 +904,12 @@ A luz ambiente simula a luz indireta que vem de todas as direções. Garante que
 static t_color calc_ambient(t_color obj_color, t_ambient ambient)
 {
     t_color result;
-    
+
     // Multiplica a cor do objeto pela intensidade ambiente
     result.r = (int)(obj_color.r * ambient.ratio);
     result.g = (int)(obj_color.g * ambient.ratio);
     result.b = (int)(obj_color.b * ambient.ratio);
-    
+
     return (result);
 }
 ```
@@ -926,7 +926,7 @@ static t_color calc_ambient(t_color obj_color, t_ambient ambient)
     │                   └─ Lado completamente PRETO              │
     │                      (irrealista!)                         │
     └─────────────────────────────────────────────────────────────┘
-    
+
     ┌─────────────────────────────────────────────────────────────┐
     │                       COM Luz Ambiente                      │
     │                                                             │
@@ -954,11 +954,11 @@ static t_color calc_diffuse(t_color obj, t_light light, t_vector n, t_vector l)
     // l = direção para a luz
     diffuse_factor = fmax(0.0, vec_dot(n, l));  // Clampa negativos para 0
     diffuse_factor *= light.brightness;
-    
+
     result.r = (int)(obj.r * diffuse_factor);
     result.g = (int)(obj.g * diffuse_factor);
     result.b = (int)(obj.b * diffuse_factor);
-    
+
     return (result);
 }
 ```
@@ -996,18 +996,18 @@ int check_shadow(t_scene *scene, t_vector point, t_light light)
     // Vetor do ponto até a luz
     to_light = vec_subtract(light.position, point);
     light_distance = vec_magnitude(to_light);
-    
+
     // Cria raio de sombra
     shadow_ray.origin = point;
     shadow_ray.direction = vec_normalize(to_light);
-    
+
     // Verifica se há algo bloqueando
     hit = find_closest_hit(scene, shadow_ray);
-    
+
     // Se atingiu algo ANTES de chegar na luz, está em sombra
     if (hit.hit && hit.t < light_distance)
         return (1);  // Em sombra
-    
+
     return (0);  // Iluminado
 }
 ```
@@ -1071,19 +1071,19 @@ t_color calculate_lighting(t_scene *scene, t_hit hit, t_ray ray)
     t_color final;
 
     (void)ray;  // Não usado na parte obrigatória (será usado no especular)
-    
+
     // Componente ambiente (sempre presente)
     ambient = calc_ambient(hit.color, scene->ambient);
-    
+
     // Componente difusa (de todas as luzes não bloqueadas)
     diffuse = apply_lights(scene, hit);
-    
+
     // Soma as componentes
     final = add_colors(ambient, diffuse);
-    
+
     // Garante que não excede 255
     final = clamp_color(final);
-    
+
     return (final);
 }
 ```
@@ -1127,19 +1127,19 @@ void init_camera(t_camera *cam)
 
     // "Up" do mundo (geralmente Y positivo)
     world_up = vec_create(0, 1, 0);
-    
+
     // Caso especial: câmera olhando direto para cima ou para baixo
     if (fabs(cam->orientation.y) > 0.999)
         world_up = vec_create(0, 0, -1);
-    
+
     // Right = Orientation × WorldUp
     // (perpendicular à direção da câmera e ao "cima" do mundo)
     cam->right = vec_normalize(vec_cross(cam->orientation, world_up));
-    
+
     // Up = Right × Orientation
     // (perpendicular à direção da câmera e ao "direita")
     cam->up = vec_normalize(vec_cross(cam->right, cam->orientation));
-    
+
     // Calcula dimensões do viewport baseado no FOV
     fov_rad = cam->fov * M_PI / 180.0;  // Graus → Radianos
     cam->viewport_height = 2.0 * tan(fov_rad / 2.0);
@@ -1164,18 +1164,18 @@ t_ray generate_ray(t_scene *scene, int x, int y)
         * scene->camera.viewport_width / 2.0;
     uv[1] = (1.0 - 2.0 * ((double)y / (scene->height - 1)))
         * scene->camera.viewport_height / 2.0;
-    
+
     // Ponto no plano de projeção
     pixel_center = scene->camera.orientation;
     pixel_center = vec_add(pixel_center,
             vec_scale(scene->camera.right, uv[0]));
     pixel_center = vec_add(pixel_center,
             vec_scale(scene->camera.up, uv[1]));
-    
+
     // Raio da câmera até o ponto no viewport
     ray.origin = scene->camera.position;
     ray.direction = vec_normalize(pixel_center);
-    
+
     return (ray);
 }
 ```
@@ -1222,7 +1222,7 @@ O FOV controla "quanto" da cena a câmera consegue ver:
 ```
     FOV pequeno (30°):                    FOV grande (120°):
     Visão "telescópica"                   Visão "olho de peixe"
-    
+
          │                                    /\
          │                                   /  \
          │                                  /    \
@@ -1230,7 +1230,7 @@ O FOV controla "quanto" da cena a câmera consegue ver:
          │                                  \    /
          │                                   \  /
          │                                    \/
-    
+
     Objetos parecem                     Objetos parecem
     maiores/mais próximos               menores/mais distantes
     Campo de visão estreito             Campo de visão amplo
@@ -1299,10 +1299,10 @@ int parse_ambient(char **parts, t_scene *scene)
     int count = 0;
     while (parts[count])
         count++;
-    
+
     if (count != 3)  // A, ratio, color
         return (error_exit("Ambient: wrong number of parameters"), 0);
-    
+
     // ... resto do código
 }
 ```
@@ -1423,16 +1423,16 @@ void render_scene_parallel(t_scene *scene)
     pthread_t threads[NUM_THREADS];
     t_thread_data data[NUM_THREADS];
     int rows_per_thread = scene->height / NUM_THREADS;
-    
+
     for (int i = 0; i < NUM_THREADS; i++)
     {
         data[i].scene = scene;
         data[i].start_y = i * rows_per_thread;
-        data[i].end_y = (i == NUM_THREADS - 1) ? 
+        data[i].end_y = (i == NUM_THREADS - 1) ?
                         scene->height : (i + 1) * rows_per_thread;
         pthread_create(&threads[i], NULL, render_section, &data[i]);
     }
-    
+
     for (int i = 0; i < NUM_THREADS; i++)
         pthread_join(threads[i], NULL);
 }
@@ -1458,7 +1458,7 @@ void render_scene_with_progress(t_scene *scene)
             put_pixel(scene->image, x, y, color);
             x++;
         }
-        
+
         // Atualiza progresso
         current_percent = (y * 100) / scene->height;
         if (current_percent != last_percent)
@@ -1491,21 +1491,21 @@ t_color trace_ray_aa(t_scene *scene, int x, int y, int samples)
             // Offset dentro do pixel
             double sub_x = x + (i + 0.5) / samples;
             double sub_y = y + (j + 0.5) / samples;
-            
+
             t_ray ray = generate_ray_subpixel(scene, sub_x, sub_y);
             t_hit hit = find_closest_hit(scene, ray);
-            
+
             if (hit.hit)
                 total = add_colors(total, calculate_lighting(scene, hit, ray));
         }
     }
-    
+
     // Média das amostras
     int total_samples = samples * samples;
     total.r /= total_samples;
     total.g /= total_samples;
     total.b /= total_samples;
-    
+
     return total;
 }
 ```
@@ -1529,11 +1529,11 @@ A reflexão especular simula o brilho em superfícies polidas. Quando a luz atin
                      │
                ──────●──────
                 superfície
-    
+
     Ângulo de incidência = Ângulo de reflexão
-    
+
     V = direção para o observador (câmera)
-    
+
     Se R e V estiverem alinhados → brilho máximo (specular highlight)
 ```
 
@@ -1569,7 +1569,7 @@ t_vector vec_reflect(t_vector incident, t_vector normal)
 }
 
 // Componente especular
-static t_color calc_specular(t_vector view, t_vector light_dir, 
+static t_color calc_specular(t_vector view, t_vector light_dir,
                              t_vector normal, t_light light,
                              double specular, int shininess)
 {
@@ -1579,16 +1579,16 @@ static t_color calc_specular(t_vector view, t_vector light_dir,
 
     // Direção da luz refletida
     reflect = vec_reflect(vec_negate(light_dir), normal);
-    
+
     // Quanto a reflexão está alinhada com a câmera
     spec_factor = fmax(0.0, vec_dot(reflect, view));
     spec_factor = pow(spec_factor, shininess);
     spec_factor *= specular * light.brightness;
-    
+
     result.r = (int)(light.color.r * spec_factor);
     result.g = (int)(light.color.g * spec_factor);
     result.b = (int)(light.color.b * spec_factor);
-    
+
     return result;
 }
 
@@ -1603,15 +1603,15 @@ t_color calculate_lighting(t_scene *scene, t_hit hit, t_ray ray)
 
     // Direção para a câmera
     view = vec_normalize(vec_negate(ray.direction));
-    
+
     ambient = calc_ambient(hit.color, scene->ambient);
     diffuse = apply_lights_diffuse(scene, hit);
     specular = apply_lights_specular(scene, hit, view);
-    
+
     final = add_colors(ambient, diffuse);
     final = add_colors(final, specular);
     final = clamp_color(final);
-    
+
     return final;
 }
 ```
@@ -1620,14 +1620,14 @@ t_color calculate_lighting(t_scene *scene, t_hit hit, t_ray ray)
 
 ```
     Sem Specular:              Com Specular:
-    
+
         ○                          ○
        ╱│╲                        ╱│●╲  ← Highlight!
       ╱ │ ╲                      ╱ │ ╲
      ╱  │  ╲                    ╱  │  ╲
     ╱   │   ╲                  ╱   │   ╲
    ─────┼─────                ─────┼─────
-    
+
     Superfície fosca          Superfície brilhante
 ```
 
@@ -1645,7 +1645,7 @@ t_color apply_checker(t_color c1, t_color c2, t_vector point, double scale)
     int x = (int)floor(point.x / scale);
     int y = (int)floor(point.y / scale);
     int z = (int)floor(point.z / scale);
-    
+
     // XOR para criar padrão alternado
     if ((x + y + z) % 2 == 0)
         return c1;
@@ -1655,7 +1655,7 @@ t_color apply_checker(t_color c1, t_color c2, t_vector point, double scale)
 // Uso em calculate_lighting():
 if (hit.has_checker)
 {
-    hit.color = apply_checker(hit.color, hit.checker_color, 
+    hit.color = apply_checker(hit.color, hit.checker_color,
                               hit.point, hit.checker_scale);
 }
 ```
@@ -1678,7 +1678,7 @@ Na versão básica, a cor da luz é ignorada. No bônus, a cor da luz afeta a il
 ### Implementação
 
 ```c
-static t_color calc_diffuse_colored(t_color obj, t_light light, 
+static t_color calc_diffuse_colored(t_color obj, t_light light,
                                     t_vector n, t_vector l)
 {
     double diffuse_factor;
@@ -1686,12 +1686,12 @@ static t_color calc_diffuse_colored(t_color obj, t_light light,
 
     diffuse_factor = fmax(0.0, vec_dot(n, l));
     diffuse_factor *= light.brightness;
-    
+
     // Mistura cor do objeto com cor da luz
     result.r = (int)(obj.r * (light.color.r / 255.0) * diffuse_factor);
     result.g = (int)(obj.g * (light.color.g / 255.0) * diffuse_factor);
     result.b = (int)(obj.b * (light.color.b / 255.0) * diffuse_factor);
-    
+
     return result;
 }
 ```
@@ -1700,7 +1700,7 @@ static t_color calc_diffuse_colored(t_color obj, t_light light,
 
 ```
     Luz Branca:              Luz Vermelha:           Luz Azul:
-    
+
         ☀️ (255,255,255)         🔴 (255,0,0)            🔵 (0,0,255)
          │                        │                       │
          ▼                        ▼                       ▼
@@ -1748,22 +1748,22 @@ t_hit intersect_cone(t_ray ray, t_cone cone, double closest)
     t_vector    oc = vec_subtract(ray.origin, cone.apex);
     double      cos2 = cos(cone.angle) * cos(cone.angle);
     double      sin2 = sin(cone.angle) * sin(cone.angle);
-    
+
     double      d_dot_v = vec_dot(ray.direction, cone.axis);
     double      oc_dot_v = vec_dot(oc, cone.axis);
-    
+
     // Coeficientes da equação quadrática
-    double a = cos2 * vec_dot(ray.direction, ray.direction) 
+    double a = cos2 * vec_dot(ray.direction, ray.direction)
                - d_dot_v * d_dot_v;
-    double b = 2.0 * (cos2 * vec_dot(ray.direction, oc) 
+    double b = 2.0 * (cos2 * vec_dot(ray.direction, oc)
                - d_dot_v * oc_dot_v);
     double c = cos2 * vec_dot(oc, oc) - oc_dot_v * oc_dot_v;
-    
+
     double discriminant = b * b - 4.0 * a * c;
-    
+
     if (discriminant < 0)
         return create_no_hit();
-    
+
     // ... resolver quadrática e verificar altura ...
 }
 ```
@@ -1775,16 +1775,16 @@ t_vector cone_normal(t_cone cone, t_vector hit_point)
 {
     t_vector to_hit = vec_subtract(hit_point, cone.apex);
     double proj = vec_dot(to_hit, cone.axis);
-    
+
     // Ponto no eixo mais próximo
     t_vector axis_point = vec_add(cone.apex, vec_scale(cone.axis, proj));
-    
+
     // Normal aponta para fora, perpendicular ao eixo
     t_vector radial = vec_subtract(hit_point, axis_point);
-    
+
     // Ajusta para a inclinação do cone
     return vec_normalize(
-        vec_subtract(radial, 
+        vec_subtract(radial,
                      vec_scale(cone.axis, vec_magnitude(radial) * tan(cone.angle)))
     );
 }
@@ -1798,7 +1798,7 @@ Bump mapping perturba as normais da superfície para criar aparência de textura
 
 ```
     Sem Bump Mapping:         Com Bump Mapping:
-    
+
     Normal →  → → → →         Normal → ↗ → ↘ → ↗
               ─────────                ≈≈≈≈≈≈≈≈≈
     Superfície lisa           Aparência de rugosidade
@@ -1813,14 +1813,14 @@ t_vector apply_bump(t_vector normal, t_vector point, double scale, double intens
     double noise_x = sin(point.x * scale) * cos(point.z * scale);
     double noise_y = sin(point.y * scale) * cos(point.x * scale);
     double noise_z = sin(point.z * scale) * cos(point.y * scale);
-    
+
     // Perturba a normal
     t_vector perturbation = vec_create(noise_x, noise_y, noise_z);
     perturbation = vec_scale(perturbation, intensity);
-    
+
     // Nova normal = normal original + perturbação
     t_vector bumped = vec_add(normal, perturbation);
-    
+
     return vec_normalize(bumped);
 }
 ```
@@ -1839,19 +1839,19 @@ t_vector sample_bump_map(t_vector point, t_vector normal)
     // Converte coordenadas 3D para UV
     double u = // ... mapeamento depende do tipo de objeto
     double v = // ...
-    
+
     // Amostra pixels vizinhos para calcular gradiente
     int x = (int)(u * bm_width) % bm_width;
     int y = (int)(v * bm_height) % bm_height;
-    
+
     double center = bump_map[y * bm_width + x] / 255.0;
     double right = bump_map[y * bm_width + ((x + 1) % bm_width)] / 255.0;
     double up = bump_map[((y + 1) % bm_height) * bm_width + x] / 255.0;
-    
+
     // Gradiente
     double dx = right - center;
     double dy = up - center;
-    
+
     // Perturba normal com base no gradiente
     // ...
 }
@@ -1870,29 +1870,29 @@ t_color trace_ray_recursive(t_scene *scene, t_ray ray, int depth)
 {
     if (depth <= 0)
         return (t_color){0, 0, 0};
-    
+
     t_hit hit = find_closest_hit(scene, ray);
-    
+
     if (!hit.hit)
         return (t_color){0, 0, 0};
-    
+
     t_color direct = calculate_lighting(scene, hit, ray);
-    
+
     // Se o objeto é reflexivo
     if (hit.reflectivity > 0)
     {
         t_vector reflect_dir = vec_reflect(ray.direction, hit.normal);
         t_ray reflect_ray;
-        reflect_ray.origin = vec_add(hit.point, 
+        reflect_ray.origin = vec_add(hit.point,
                                      vec_scale(hit.normal, EPSILON));
         reflect_ray.direction = reflect_dir;
-        
+
         t_color reflected = trace_ray_recursive(scene, reflect_ray, depth - 1);
-        
+
         // Mistura cor direta com reflexão
         direct = blend_colors(direct, reflected, hit.reflectivity);
     }
-    
+
     return direct;
 }
 ```
@@ -1906,12 +1906,12 @@ t_vector vec_refract(t_vector incident, t_vector normal, double eta)
 {
     double cos_i = -vec_dot(incident, normal);
     double sin2_t = eta * eta * (1.0 - cos_i * cos_i);
-    
+
     if (sin2_t > 1.0)
         return vec_reflect(incident, normal);  // Reflexão total interna
-    
+
     double cos_t = sqrt(1.0 - sin2_t);
-    
+
     return vec_add(
         vec_scale(incident, eta),
         vec_scale(normal, eta * cos_i - cos_t)
@@ -1927,36 +1927,36 @@ Simule o foco de uma câmera real!
 t_color trace_ray_dof(t_scene *scene, int x, int y)
 {
     t_color total = {0, 0, 0};
-    
+
     for (int sample = 0; sample < DOF_SAMPLES; sample++)
     {
         // Ponto focal na cena
         t_ray focus_ray = generate_ray(scene, x, y);
         t_vector focal_point = ray_at(focus_ray, scene->camera.focal_distance);
-        
+
         // Origem ligeiramente deslocada na "lente"
         double lens_u = random_double(-1, 1) * scene->camera.aperture;
         double lens_v = random_double(-1, 1) * scene->camera.aperture;
-        
+
         t_vector lens_offset = vec_add(
             vec_scale(scene->camera.right, lens_u),
             vec_scale(scene->camera.up, lens_v)
         );
-        
+
         t_ray dof_ray;
         dof_ray.origin = vec_add(scene->camera.position, lens_offset);
         dof_ray.direction = vec_normalize(
             vec_subtract(focal_point, dof_ray.origin)
         );
-        
+
         total = add_colors(total, trace_ray_single(scene, dof_ray));
     }
-    
+
     // Média
     total.r /= DOF_SAMPLES;
     total.g /= DOF_SAMPLES;
     total.b /= DOF_SAMPLES;
-    
+
     return total;
 }
 ```
@@ -1969,23 +1969,23 @@ Simule sombras suaves em cantos e fendas!
 double calculate_ao(t_scene *scene, t_hit hit)
 {
     double occlusion = 0.0;
-    
+
     for (int i = 0; i < AO_SAMPLES; i++)
     {
         // Gera direção aleatória no hemisfério da normal
         t_vector random_dir = random_hemisphere_direction(hit.normal);
-        
+
         t_ray ao_ray;
         ao_ray.origin = vec_add(hit.point, vec_scale(hit.normal, EPSILON));
         ao_ray.direction = random_dir;
-        
+
         t_hit ao_hit = find_closest_hit(scene, ao_ray);
-        
+
         // Se atingiu algo próximo, está "ocludido"
         if (ao_hit.hit && ao_hit.t < AO_RADIUS)
             occlusion += 1.0 - (ao_hit.t / AO_RADIUS);
     }
-    
+
     return 1.0 - (occlusion / AO_SAMPLES);
 }
 ```
@@ -2009,25 +2009,25 @@ t_vector sphere_position_at_time(t_animated_sphere *asph, double time)
 t_color trace_ray_motion_blur(t_scene *scene, int x, int y)
 {
     t_color total = {0, 0, 0};
-    
+
     for (int sample = 0; sample < MOTION_SAMPLES; sample++)
     {
         // Tempo aleatório durante o "frame"
         double time = random_double(0, 1);
-        
+
         // Atualiza posições dos objetos para este tempo
         update_scene_for_time(scene, time);
-        
+
         // Traça raio
         t_color sample_color = trace_ray(scene, x, y);
         total = add_colors(total, sample_color);
     }
-    
+
     // Média
     total.r /= MOTION_SAMPLES;
     total.g /= MOTION_SAMPLES;
     total.b /= MOTION_SAMPLES;
-    
+
     return total;
 }
 ```
@@ -2042,11 +2042,11 @@ t_color ray_march_volume(t_scene *scene, t_ray ray, double max_t)
     t_color accumulated = {0, 0, 0};
     double step = 0.1;  // Tamanho do passo
     double t = 0;
-    
+
     while (t < max_t)
     {
         t_vector sample_point = ray_at(ray, t);
-        
+
         // Para cada luz
         for (int i = 0; i < scene->light_count; i++)
         {
@@ -2056,16 +2056,16 @@ t_color ray_march_volume(t_scene *scene, t_ray ray, double max_t)
                 // Adiciona um pouco de luz
                 double distance = vec_distance(sample_point, scene->lights[i].position);
                 double intensity = scene->lights[i].brightness / (distance * distance);
-                
+
                 accumulated.r += (int)(intensity * scene->lights[i].color.r * VOLUME_DENSITY);
                 accumulated.g += (int)(intensity * scene->lights[i].color.g * VOLUME_DENSITY);
                 accumulated.b += (int)(intensity * scene->lights[i].color.b * VOLUME_DENSITY);
             }
         }
-        
+
         t += step;
     }
-    
+
     return clamp_color(accumulated);
 }
 ```
@@ -2171,7 +2171,7 @@ Esteja preparado para fazer estas mudanças ao vivo:
 
 - **Scratchapixel**: https://www.scratchapixel.com/
   - Tutoriais detalhados sobre ray tracing
-  
+
 - **The Graphics Codex**: http://graphicscodex.com/
   - Referência rápida de fórmulas e algoritmos
 
@@ -2182,7 +2182,7 @@ Esteja preparado para fazer estas mudanças ao vivo:
 
 - **Shadertoy**: https://www.shadertoy.com/
   - Experimente ray tracing em GLSL no navegador
-  
+
 - **GeoGebra 3D**: https://www.geogebra.org/3d
   - Visualize vetores e geometria 3D
 
@@ -2256,6 +2256,6 @@ Boa sorte na sua jornada! 🚀
 
 ---
 
-**Versão**: 1.0  
-**Última atualização**: Janeiro 2026  
+**Versão**: 1.0
+**Última atualização**: Janeiro 2026
 **Autor**: Enciclopédia gerada para o projeto miniRT da Ecole 42
