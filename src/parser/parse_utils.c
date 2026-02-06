@@ -66,11 +66,10 @@ int	parse_color(char *str, t_color *color)
 
 	parts = ft_split(str, ',');
 	if (!parts || !parts[0] || !parts[1] || !parts[2] || parts[3])
-	{
-		if (parts)
-			free_split(parts);
-		return (0);
-	}
+		return (free_split(parts), 0);
+	if (!validate_int_str(parts[0]) || !validate_int_str(parts[1])
+		|| !validate_int_str(parts[2]))
+		return (free_split(parts), 0);
 	r = ft_atoi(parts[0]);
 	g = ft_atoi(parts[1]);
 	b = ft_atoi(parts[2]);

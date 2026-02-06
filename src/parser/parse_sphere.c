@@ -24,7 +24,7 @@ int	parse_sphere(char *line, t_scene *scene)
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
-		return (error_exit("Sphere: invalid format"), 0);
+		return (free_split(parts), error_exit("Sphere: invalid format"), 0);
 	if (!parse_vector(parts[1], &sp.center)
 		|| !parse_color(parts[3], &sp.color))
 		return (free_split(parts), error_exit("Sphere: invalid data"), 0);

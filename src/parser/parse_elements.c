@@ -27,6 +27,8 @@ int	parse_camera(char **parts, t_scene *scene)
 		return (error_exit("Camera: invalid position"), 0);
 	if (!parse_vector(parts[2], &scene->camera.orientation))
 		return (error_exit("Camera: invalid orientation"), 0);
+	if (!validate_normalized(scene->camera.orientation))
+		return (error_exit("Camera: orientation not normalized"), 0);
 	scene->camera.orientation = vec_normalize(scene->camera.orientation);
 	fov = parse_double(parts[3], &error);
 	if (error || fov <= 0.0 || fov >= 180.0)
@@ -44,7 +46,7 @@ int	parse_light(char *line, t_scene *scene)
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
-		return (error_exit("Light: invalid format"), 0);
+		return (free_split(parts), error_exit("Light: invalid format"), 0);
 	if (!parse_vector(parts[1], &light.position)
 		|| !parse_color(parts[3], &light.color))
 		return (free_split(parts), error_exit("Light: invalid data"), 0);

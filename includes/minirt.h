@@ -115,6 +115,7 @@ double		ft_atod(char *str, int *end);
 int			validate_normalized(t_vector vec);
 int			validate_range_double(double val, double min, double max);
 int			validate_range_int(int val, int min, int max);
+int			validate_int_str(char *str);
 
 /* Initialization and cleanup */
 void		init_scene(t_scene *scene);

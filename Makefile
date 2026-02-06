@@ -69,7 +69,6 @@ clean:
 	@rm -rf $(OBJ_DIR)/*
 	@make -C lib/libft clean
 
-
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@rm -f $(NAME)
