@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static void	free_split(char **parts)
+void	free_split(char **parts)
 {
 	int	i;
 
@@ -17,12 +17,12 @@ static void	free_split(char **parts)
 
 double	parse_double(char *str, int *error)
 {
-	char	*endptr;
+	int		end;
 	double	result;
 
 	*error = 0;
-	result = strtod(str, &endptr);
-	if (*endptr != '\0' && *endptr != ',' && *endptr != ' ')
+	result = ft_atod(str, &end);
+	if (str[end] != '\0' && str[end] != ',' && str[end] != ' ')
 		*error = 1;
 	return (result);
 }

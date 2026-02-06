@@ -1,20 +1,5 @@
 #include "minirt.h"
 
-static void	free_split(char **parts)
-{
-	int	i;
-
-	if (!parts)
-		return ;
-	i = 0;
-	while (parts[i])
-	{
-		free(parts[i]);
-		i++;
-	}
-	free(parts);
-}
-
 static int	add_plane(t_scene *scene, t_plane pl)
 {
 	t_plane	*new;
@@ -36,15 +21,13 @@ int	parse_plane(char *line, t_scene *scene)
 	t_plane	pl;
 
 	parts = ft_split(line, ' ');
-	if (!parts || !parts[1] || !parts[2] || !parts[3])
+	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
 		return (error_exit("Plane: invalid format"), 0);
 	if (!parse_vector(parts[1], &pl.point)
 		|| !parse_vector(parts[2], &pl.normal)
 		|| !parse_color(parts[3], &pl.color))
 		return (free_split(parts), error_exit("Plane: invalid data"), 0);
-	if (!validate_normalized(pl.normal))
-		return (free_split(parts),
-			error_exit("Plane normal must be normalized"), 0);
+	pl.normal = vec_normalize(pl.normal);
 	free_split(parts);
 	return (add_plane(scene, pl));
 }
@@ -73,15 +56,13 @@ int	parse_cylinder(char *line, t_scene *scene)
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3]
-		|| !parts[4] || !parts[5])
+		|| !parts[4] || !parts[5] || parts[6])
 		return (error_exit("Cylinder: invalid format"), 0);
 	if (!parse_vector(parts[1], &cy.center)
 		|| !parse_vector(parts[2], &cy.axis)
 		|| !parse_color(parts[5], &cy.color))
 		return (free_split(parts), error_exit("Cylinder: invalid data"), 0);
-	if (!validate_normalized(cy.axis))
-		return (free_split(parts),
-			error_exit("Cylinder axis must be normalized"), 0);
+	cy.axis = vec_normalize(cy.axis);
 	cy.diameter = parse_double(parts[3], &error);
 	cy.height = parse_double(parts[4], &error);
 	if (error || cy.diameter <= 0 || cy.height <= 0)

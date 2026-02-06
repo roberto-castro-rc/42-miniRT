@@ -28,6 +28,8 @@ void	init_camera(t_camera *cam)
 	cam->viewport_height = 2.0 * tan(theta / 2.0);
 	cam->viewport_width = cam->viewport_height * cam->aspect_ratio;
 	world_up = vec_create(0, 1, 0);
+	if (fabs(vec_dot(cam->orientation, world_up)) > 0.999)
+		world_up = vec_create(0, 0, 1);
 	cam->right = vec_normalize(vec_cross(cam->orientation, world_up));
 	cam->up = vec_normalize(vec_cross(cam->right, cam->orientation));
 }

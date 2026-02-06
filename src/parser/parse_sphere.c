@@ -1,20 +1,5 @@
 #include "minirt.h"
 
-static void	free_split(char **parts)
-{
-	int	i;
-
-	if (!parts)
-		return ;
-	i = 0;
-	while (parts[i])
-	{
-		free(parts[i]);
-		i++;
-	}
-	free(parts);
-}
-
 static int	add_sphere(t_scene *scene, t_sphere sp)
 {
 	t_sphere	*new;
@@ -38,7 +23,7 @@ int	parse_sphere(char *line, t_scene *scene)
 	int			error;
 
 	parts = ft_split(line, ' ');
-	if (!parts || !parts[1] || !parts[2] || !parts[3])
+	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
 		return (error_exit("Sphere: invalid format"), 0);
 	if (!parse_vector(parts[1], &sp.center)
 		|| !parse_color(parts[3], &sp.color))

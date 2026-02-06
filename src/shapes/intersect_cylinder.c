@@ -26,26 +26,36 @@ static double	check_body(t_ray ray, t_cylinder cy, double closest)
 	return (-1.0);
 }
 
+static t_hit	best_hit(t_hit a, t_hit b)
+{
+	if (!a.hit)
+		return (b);
+	if (!b.hit)
+		return (a);
+	if (a.t <= b.t)
+		return (a);
+	return (b);
+}
+
 t_hit	intersect_cylinder(t_ray ray, t_cylinder cy, double closest)
 {
-	double		t_body;
-	t_hit		hit_cap1;
-	t_hit		hit_cap2;
+	t_hit		body;
+	t_hit		cap1;
+	t_hit		cap2;
 	t_vector	top;
+	double		t_body;
 
 	t_body = check_body(ray, cy, closest);
-	if (t_body > 0 && t_body < closest)
+	body = create_no_hit();
+	if (t_body > 0)
+	{
+		body = create_body_hit(ray, cy, t_body);
 		closest = t_body;
-	hit_cap1 = check_cap(ray, cy, cy.center, closest);
-	if (hit_cap1.hit && hit_cap1.t < closest)
-		closest = hit_cap1.t;
+	}
+	cap1 = check_cap(ray, cy, cy.center, closest);
+	if (cap1.hit)
+		closest = cap1.t;
 	top = vec_add(cy.center, vec_scale(cy.axis, cy.height));
-	hit_cap2 = check_cap(ray, cy, top, closest);
-	if (t_body > 0 && t_body < closest)
-		return (create_body_hit(ray, cy, t_body));
-	if (hit_cap1.hit && hit_cap1.t < closest)
-		return (hit_cap1);
-	if (hit_cap2.hit && hit_cap2.t < closest)
-		return (hit_cap2);
-	return (create_cy_no_hit());
+	cap2 = check_cap(ray, cy, top, closest);
+	return (best_hit(body, best_hit(cap1, cap2)));
 }
