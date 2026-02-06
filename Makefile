@@ -77,8 +77,6 @@ fclean: clean
 
 re: fclean all
 
-bonus: all
-
 # =============================================================================
 # Test rules
 # =============================================================================
@@ -157,4 +155,4 @@ demo3: $(NAME)
 	@echo "$(GREEN)Running advanced demo...$(RESET)"
 	@./$(NAME) tests/level3_advanced/02_snowman.rt
 
-.PHONY: all clean fclean re bonus libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual run valgrind demo demo2 demo3
+.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual run valgrind demo demo2 demo3
