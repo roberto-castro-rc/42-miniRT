@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-t_hit	create_cy_no_hit(void)
+t_hit	create_no_hit(void)
 {
 	t_hit	hit;
 
@@ -50,14 +50,14 @@ t_hit	check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl)
 
 	denom = vec_dot(ray.direction, cy.axis);
 	if (fabs(denom) < EPSILON)
-		return (create_cy_no_hit());
+		return (create_no_hit());
 	diff = vec_subtract(cap, ray.origin);
 	t = vec_dot(diff, cy.axis) / denom;
 	if (t < EPSILON || t >= cl)
-		return (create_cy_no_hit());
+		return (create_no_hit());
 	hit.point = ray_at(ray, t);
 	if (vec_distance(hit.point, cap) > cy.radius)
-		return (create_cy_no_hit());
+		return (create_no_hit());
 	hit.hit = 1;
 	hit.t = t;
 	hit.normal = cy.axis;

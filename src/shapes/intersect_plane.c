@@ -1,14 +1,5 @@
 #include "minirt.h"
 
-static t_hit	create_no_hit(void)
-{
-	t_hit	hit;
-
-	hit.hit = 0;
-	hit.t = INFINITY;
-	return (hit);
-}
-
 t_hit	intersect_plane(t_ray ray, t_plane pl, double closest)
 {
 	double		denom;

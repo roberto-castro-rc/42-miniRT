@@ -10,7 +10,8 @@ static t_color	calc_ambient(t_color obj_color, t_ambient ambient)
 	return (result);
 }
 
-static t_color	calc_diffuse(t_color obj, t_light light, t_vector n, t_vector l)
+static t_color	calc_diffuse(t_color obj, t_light light,
+		t_vector n, t_vector l)
 {
 	double	diffuse_factor;
 	t_color	result;

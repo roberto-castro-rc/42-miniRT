@@ -8,7 +8,6 @@ void	error_exit(char *message)
 		write(2, message, ft_strlen(message));
 		write(2, "\n", 1);
 	}
-	exit(1);
 }
 
 int	check_file_extension(char *filename, char *ext)

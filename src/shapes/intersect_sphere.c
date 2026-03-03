@@ -1,14 +1,5 @@
 #include "minirt.h"
 
-static t_hit	create_no_hit(void)
-{
-	t_hit	hit;
-
-	hit.hit = 0;
-	hit.t = INFINITY;
-	return (hit);
-}
-
 static double	solve_quadratic(double a, double b, double disc)
 {
 	double	t1;

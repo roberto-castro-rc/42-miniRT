@@ -107,12 +107,15 @@ int			parse_plane(char *line, t_scene *scene);
 int			parse_cylinder(char *line, t_scene *scene);
 
 /* Parsing utilities */
+void		free_split(char **parts);
 int			parse_vector(char *str, t_vector *vec);
 int			parse_color(char *str, t_color *color);
 double		parse_double(char *str, int *error);
+double		ft_atod(char *str, int *end);
 int			validate_normalized(t_vector vec);
 int			validate_range_double(double val, double min, double max);
 int			validate_range_int(int val, int min, int max);
+int			validate_int_str(char *str);
 
 /* Initialization and cleanup */
 void		init_scene(t_scene *scene);
@@ -132,7 +135,7 @@ t_hit		intersect_plane(t_ray ray, t_plane pl, double closest);
 t_hit		intersect_cylinder(t_ray ray, t_cylinder cy, double closest);
 
 /* Cylinder utilities */
-t_hit		create_cy_no_hit(void);
+t_hit		create_no_hit(void);
 t_hit		create_body_hit(t_ray ray, t_cylinder cy, double t);
 int			check_body_hit(t_ray ray, t_cylinder cy, double t, double cl);
 t_hit		check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl);

@@ -1,26 +1,11 @@
 #include "minirt.h"
 
-static void	free_split(char **parts)
-{
-	int	i;
-
-	if (!parts)
-		return ;
-	i = 0;
-	while (parts[i])
-	{
-		free(parts[i]);
-		i++;
-	}
-	free(parts);
-}
-
 int	parse_ambient(char **parts, t_scene *scene)
 {
 	int		error;
 	double	ratio;
 
-	if (!parts[1] || !parts[2])
+	if (!parts[1] || !parts[2] || parts[3])
 		return (error_exit("Ambient: invalid format"), 0);
 	ratio = parse_double(parts[1], &error);
 	if (error || !validate_range_double(ratio, 0.0, 1.0))
@@ -36,17 +21,18 @@ int	parse_camera(char **parts, t_scene *scene)
 	int		error;
 	double	fov;
 
-	if (!parts[1] || !parts[2] || !parts[3])
+	if (!parts[1] || !parts[2] || !parts[3] || parts[4])
 		return (error_exit("Camera: invalid format"), 0);
 	if (!parse_vector(parts[1], &scene->camera.position))
 		return (error_exit("Camera: invalid position"), 0);
 	if (!parse_vector(parts[2], &scene->camera.orientation))
 		return (error_exit("Camera: invalid orientation"), 0);
 	if (!validate_normalized(scene->camera.orientation))
-		return (error_exit("Camera: orientation must be normalized"), 0);
+		return (error_exit("Camera: orientation not normalized"), 0);
+	scene->camera.orientation = vec_normalize(scene->camera.orientation);
 	fov = parse_double(parts[3], &error);
-	if (error || !validate_range_double(fov, 0.0, 180.0))
-		return (error_exit("Camera FOV must be in [0, 180]"), 0);
+	if (error || fov <= 0.0 || fov >= 180.0)
+		return (error_exit("Camera FOV must be in range (0, 180)"), 0);
 	scene->camera.fov = fov;
 	return (1);
 }
@@ -59,8 +45,8 @@ int	parse_light(char *line, t_scene *scene)
 	int			error;
 
 	parts = ft_split(line, ' ');
-	if (!parts || !parts[1] || !parts[2] || !parts[3])
-		return (error_exit("Light: invalid format"), 0);
+	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
+		return (free_split(parts), error_exit("Light: invalid format"), 0);
 	if (!parse_vector(parts[1], &light.position)
 		|| !parse_color(parts[3], &light.color))
 		return (free_split(parts), error_exit("Light: invalid data"), 0);

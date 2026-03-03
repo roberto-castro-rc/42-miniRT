@@ -16,6 +16,7 @@ SRCS		= src/core/main.c \
 		  src/parser/parse_objects.c \
 		  src/parser/parse_sphere.c \
 		  src/parser/parse_utils.c \
+		  src/parser/ft_atod.c \
 		  src/parser/validate.c \
 		  src/math/vec_basic.c \
 		  src/math/vec_products.c \
@@ -67,7 +68,6 @@ clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)/*
 	@make -C lib/libft clean
-
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"

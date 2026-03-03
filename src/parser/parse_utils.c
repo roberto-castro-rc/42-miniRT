@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-static void	free_split(char **parts)
+void	free_split(char **parts)
 {
 	int	i;
 
@@ -17,12 +17,12 @@ static void	free_split(char **parts)
 
 double	parse_double(char *str, int *error)
 {
-	char	*endptr;
+	int		end;
 	double	result;
 
 	*error = 0;
-	result = strtod(str, &endptr);
-	if (*endptr != '\0' && *endptr != ',' && *endptr != ' ')
+	result = ft_atod(str, &end);
+	if (str[end] != '\0' && str[end] != ',' && str[end] != ' ')
 		*error = 1;
 	return (result);
 }
@@ -66,11 +66,10 @@ int	parse_color(char *str, t_color *color)
 
 	parts = ft_split(str, ',');
 	if (!parts || !parts[0] || !parts[1] || !parts[2] || parts[3])
-	{
-		if (parts)
-			free_split(parts);
-		return (0);
-	}
+		return (free_split(parts), 0);
+	if (!validate_int_str(parts[0]) || !validate_int_str(parts[1])
+		|| !validate_int_str(parts[2]))
+		return (free_split(parts), 0);
 	r = ft_atoi(parts[0]);
 	g = ft_atoi(parts[1]);
 	b = ft_atoi(parts[2]);
