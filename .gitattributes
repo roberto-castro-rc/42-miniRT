@@ -1,0 +1,17 @@
+# Force LF line endings for all text files
+* text=auto eol=lf
+
+# Explicitly LF for shell scripts and C files
+*.sh    text eol=lf
+*.c     text eol=lf
+*.h     text eol=lf
+*.rt    text eol=lf
+*.md    text eol=lf
+Makefile text eol=lf
+
+# Binary files - no conversion
+*.a     binary
+*.o     binary
+*.pdf   binary
+*.png   binary
+*.gif   binary
