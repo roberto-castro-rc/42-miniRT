@@ -55,7 +55,6 @@ print_summary() {
     echo -e "  ${GREEN}Passed:${NC} $PASS"
     echo -e "  ${RED}Failed:${NC} $FAIL"
     echo -e "  ${YELLOW}Total:${NC}  $TOTAL"
-
     if [ $FAIL -eq 0 ]; then
         echo -e "\n  ${GREEN}${BOLD}All tests passed! ✓${NC}\n"
         return 0
@@ -69,7 +68,6 @@ print_summary() {
 # Test Functions
 # =============================================================================
 
-# Test that a valid file runs without crashing (visual test)
 test_valid_scene() {
     local file=$1
     local name=$(basename "$file" .rt)
@@ -79,8 +77,6 @@ test_valid_scene() {
         return
     fi
 
-    # Run miniRT with timeout and check if it starts successfully
-    # The program should open and render without crashing
     timeout $TIMEOUT $MINIRT "$file" &
     local pid=$!
     sleep 1
@@ -100,13 +96,11 @@ test_valid_scene() {
     fi
 }
 
-# Test that an invalid file produces an error
 test_error_scene() {
     local file=$1
     local name=$(basename "$file" .rt)
 
     if [ ! -f "$file" ]; then
-        # For missing file test
         if [[ "$file" == *"nonexistent"* ]]; then
             $MINIRT "$file" 2>&1 | grep -qi "error"
             if [ $? -eq 0 ]; then
@@ -120,7 +114,6 @@ test_error_scene() {
         return
     fi
 
-    # Run miniRT and expect it to fail with error message
     output=$($MINIRT "$file" 2>&1)
     exit_code=$?
 
@@ -133,11 +126,9 @@ test_error_scene() {
     fi
 }
 
-# Test missing file
 test_missing_file() {
     local output
     output=$($MINIRT "nonexistent_file_xyz.rt" 2>&1)
-
     if echo "$output" | grep -qi "error"; then
         print_result 0 "Missing file detection"
     else
@@ -145,11 +136,9 @@ test_missing_file() {
     fi
 }
 
-# Test wrong extension
 test_wrong_extension() {
     local output
     output=$($MINIRT "tests/error_tests/02_wrong_extension.txt" 2>&1)
-
     if echo "$output" | grep -qi "error"; then
         print_result 0 "Wrong extension detection"
     else
@@ -157,11 +146,9 @@ test_wrong_extension() {
     fi
 }
 
-# Test no arguments
 test_no_args() {
     local output
     output=$($MINIRT 2>&1)
-
     if echo "$output" | grep -qi "error\|usage"; then
         print_result 0 "No arguments handling"
     else
@@ -175,7 +162,6 @@ test_no_args() {
 
 run_level1_tests() {
     print_header "Level 1 Tests - Basic Rendering"
-
     for file in tests/level1_basic/*.rt; do
         if [ -f "$file" ]; then
             test_valid_scene "$file"
@@ -185,7 +171,6 @@ run_level1_tests() {
 
 run_level2_tests() {
     print_header "Level 2 Tests - Intermediate"
-
     for file in tests/level2_intermediate/*.rt; do
         if [ -f "$file" ]; then
             test_valid_scene "$file"
@@ -195,7 +180,6 @@ run_level2_tests() {
 
 run_level3_tests() {
     print_header "Level 3 Tests - Advanced"
-
     for file in tests/level3_advanced/*.rt; do
         if [ -f "$file" ]; then
             test_valid_scene "$file"
@@ -205,12 +189,10 @@ run_level3_tests() {
 
 run_error_tests() {
     print_header "Error Handling Tests"
-
     print_subheader "File Handling"
     test_no_args
     test_missing_file
     test_wrong_extension
-
     print_subheader "Parsing Errors"
     for file in tests/error_tests/*.rt; do
         if [ -f "$file" ]; then
@@ -221,7 +203,6 @@ run_error_tests() {
 
 run_bonus_tests() {
     print_header "Bonus Tests - Multiple Lights"
-
     for file in tests/bonus/*.rt; do
         if [ -f "$file" ]; then
             test_valid_scene "$file"
@@ -231,7 +212,6 @@ run_bonus_tests() {
 
 run_edge_case_tests() {
     print_header "Edge Case Tests"
-
     for file in tests/edge_cases/*.rt; do
         if [ -f "$file" ]; then
             test_valid_scene "$file"
@@ -239,17 +219,94 @@ run_edge_case_tests() {
     done
 }
 
+run_leak_tests() {
+    print_header "Leak Detection Tests (valgrind)"
+
+    if ! command -v valgrind &>/dev/null; then
+        echo -e "  ${RED}valgrind not found. Install with: sudo apt install valgrind${NC}"
+        return 1
+    fi
+
+    # Flags explicadas:
+    #   --leak-check=full         mostra cada bloco perdido individualmente
+    #   --show-leak-kinds=all     inclui still-reachable, possible, indirect
+    #   --track-origins=yes       rastreia origem de valores nao inicializados
+    #   --error-exitcode=42       retorna 42 se houver qualquer erro/leak
+    #   --errors-for-leak-kinds=all  trata todos os tipos de leak como erro
+    #   --num-callers=20          mais frames no stack trace
+    # Nota: --track-fds=yes removido pois WSL herda fd /dev/ptmx (falso positivo)
+    local VG="valgrind --leak-check=full --show-leak-kinds=all \
+              --track-origins=yes \
+              --error-exitcode=42 --errors-for-leak-kinds=all \
+              --num-callers=20"
+    local VG_LOG="/tmp/vg_minirt.log"
+
+    check_leak() {
+        local label="$1"
+        # </dev/null isola stdin - impede que valgrind/minirt consuma input do menu
+        $VG $MINIRT "${@:2}" </dev/null >"$VG_LOG" 2>&1
+        local code=$?
+        if [ $code -eq 42 ]; then
+            print_result 1 "LEAK: $label"
+            # Mostra stack trace completo + resumo de bytes
+            grep -E 'by 0x|at 0x|definitely|indirectly|still reachable|FILE DESC|bytes in' \
+                "$VG_LOG" 2>/dev/null | head -15 | sed 's/^/    /'
+        else
+            print_result 0 "$label"
+        fi
+    }
+
+    print_subheader "Invalid args / file paths"
+    check_leak "no arguments"
+    check_leak "missing file"                   "nonexistent_xyz.rt"
+    check_leak "wrong extension"                "tests/error_tests/02_wrong_extension.txt"
+
+    print_subheader "Parser error paths (all error_tests)"
+    for file in tests/error_tests/*.rt; do
+        [ -f "$file" ] && check_leak "$(basename "$file" .rt)" "$file"
+    done
+
+    print_subheader "Valid scenes: parser + cleanup (DISPLAY invalido = sem janela)"
+    # DISPLAY=:99 forca MLX a falhar na abertura da janela e sair rapidamente.
+    # Isso permite checar se free() de spheres/planes/cylinders/lights ocorre
+    # em todos os caminhos de saida, incluindo falha do MLX.
+    local valid_scenes=(
+        "tests/level1_basic/02_single_plane.rt"
+        "tests/level1_basic/03_single_cylinder.rt"
+        "tests/level2_intermediate/03_mixed_objects.rt"
+        "tests/level2_intermediate/08_multiple_shadows.rt"
+        "tests/level3_advanced/01_complex_scene.rt"
+        "tests/edge_cases/09_zero_ambient.rt"
+        "tests/edge_cases/11_thin_cylinder.rt"
+        "tests/edge_cases/13_negative_coords.rt"
+    )
+    for scene in "${valid_scenes[@]}"; do
+        if [ -f "$scene" ]; then
+            local name=$(basename "$scene" .rt)
+            DISPLAY=:99 timeout 5 $VG $MINIRT "$scene" </dev/null >"$VG_LOG" 2>&1
+            local code=$?
+            if [ $code -eq 42 ]; then
+                print_result 1 "LEAK: $name"
+                grep -A2 'definitely lost\|indirectly lost\|Invalid\|FILE DESCRIPTORS' \
+                    "$VG_LOG" 2>/dev/null | head -12 | sed 's/^/    /'
+            else
+                print_result 0 "$name"
+            fi
+        fi
+    done
+
+    rm -f "$VG_LOG"
+}
+
 run_quick_visual_test() {
     print_header "Quick Visual Test"
     echo -e "${YELLOW}This will open scenes for visual inspection.${NC}"
     echo -e "${YELLOW}Press ESC to close each window.${NC}"
-
     local scenes=(
         "tests/level1_basic/01_single_sphere.rt"
         "tests/level2_intermediate/03_mixed_objects.rt"
         "tests/level3_advanced/02_snowman.rt"
     )
-
     for scene in "${scenes[@]}"; do
         if [ -f "$scene" ]; then
             echo -e "\n${CYAN}Opening: $(basename $scene)${NC}"
@@ -275,7 +332,8 @@ show_menu() {
     echo "  6) Bonus Tests"
     echo "  7) Edge Case Tests"
     echo "  8) Quick Visual Test"
-    echo "  9) Exit"
+    echo "  9) Leak Detection (valgrind)"
+    echo "  0) Exit"
     echo ""
     echo -n "  Select option: "
 }
@@ -284,14 +342,12 @@ show_menu() {
 # Main
 # =============================================================================
 
-# Check if miniRT exists
 if [ ! -f "$MINIRT" ]; then
     echo -e "${RED}Error: miniRT executable not found!${NC}"
     echo -e "Please run 'make' first."
     exit 1
 fi
 
-# Parse command line arguments
 case "$1" in
     "all")
         run_level1_tests
@@ -299,6 +355,7 @@ case "$1" in
         run_level3_tests
         run_edge_case_tests
         run_error_tests
+        run_bonus_tests
         print_summary
         ;;
     "level1")
@@ -328,8 +385,11 @@ case "$1" in
     "visual")
         run_quick_visual_test
         ;;
+    "leak"|"leaks")
+        run_leak_tests
+        print_summary
+        ;;
     "")
-        # Interactive mode
         while true; do
             show_menu
             read choice
@@ -341,6 +401,7 @@ case "$1" in
                     run_level3_tests
                     run_edge_case_tests
                     run_error_tests
+                    run_bonus_tests
                     print_summary
                     ;;
                 2)
@@ -377,6 +438,11 @@ case "$1" in
                     run_quick_visual_test
                     ;;
                 9)
+                    PASS=0; FAIL=0; TOTAL=0
+                    run_leak_tests
+                    print_summary
+                    ;;
+                0)
                     echo -e "\n${GREEN}Goodbye!${NC}\n"
                     exit 0
                     ;;
@@ -387,7 +453,7 @@ case "$1" in
         done
         ;;
     *)
-        echo "Usage: $0 [all|level1|level2|level3|error|bonus|edge|visual]"
-        exit 1
+        echo "Usage: $0 [all|level1|level2|level3|error|bonus|edge|visual|leak]"
+         exit 1
         ;;
 esac

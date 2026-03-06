@@ -44,6 +44,18 @@ static char	*trim_line(char *line)
 	return (trimmed);
 }
 
+static void	drain_gnl(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+}
+
 int	parse_scene(char *filename, t_scene *scene)
 {
 	int		fd;
@@ -61,7 +73,7 @@ int	parse_scene(char *filename, t_scene *scene)
 		trimmed = trim_line(line);
 		free(line);
 		if (trimmed && !parse_line(trimmed, scene, &flags))
-			return (free(trimmed), close(fd), 0);
+			return (free(trimmed), drain_gnl(fd), close(fd), 0);
 		if (trimmed)
 			free(trimmed);
 		line = get_next_line(fd);

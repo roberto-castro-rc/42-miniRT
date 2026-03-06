@@ -134,12 +134,19 @@ run: $(NAME)
 		./$(NAME) $(SCENE); \
 	fi
 
-# Run with valgrind (memory check)
+# Run leak tests with valgrind (all error paths + valid scenes)
+test-leak: $(NAME)
+	@chmod +x tests/run_tests.sh
+	@./tests/run_tests.sh leak
+
+# Run valgrind on a specific scene
 valgrind: $(NAME)
 	@if [ -z "$(SCENE)" ]; then \
-		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) scenes/simple.rt; \
+		echo "$(RED)Usage: make valgrind SCENE=path/to/scene.rt$(RESET)"; \
+		echo "  Or use: make test-leak  (runs all leak tests)"; \
 	else \
-		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME) $(SCENE); \
+		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
+		--track-fds=yes --error-exitcode=42 ./$(NAME) $(SCENE); \
 	fi
 
 # Quick test scenes
@@ -155,4 +162,4 @@ demo3: $(NAME)
 	@echo "$(GREEN)Running advanced demo...$(RESET)"
 	@./$(NAME) tests/level3_advanced/02_snowman.rt
 
-.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual run valgrind demo demo2 demo3
+.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
