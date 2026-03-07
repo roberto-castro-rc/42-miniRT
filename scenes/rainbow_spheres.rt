@@ -1,0 +1,30 @@
+# Rainbow Spheres - Seven spheres in rainbow colors
+A 0.2 255,255,255
+
+C 0,4,-15 0,0,1 70
+
+L 0,10,-5 0.9 255,255,255
+
+# Floor
+pl 0,-3,0 0,1,0 40,40,40
+
+# Red
+sp -9,0,5 2 255,30,30
+
+# Orange
+sp -6,0,5 2 255,140,0
+
+# Yellow
+sp -3,0,5 2 255,255,0
+
+# Green
+sp 0,0,5 2 50,200,50
+
+# Blue
+sp 3,0,5 2 50,80,255
+
+# Indigo
+sp 6,0,5 2 75,0,130
+
+# Violet
+sp 9,0,5 2 180,0,255

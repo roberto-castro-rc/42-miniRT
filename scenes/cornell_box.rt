@@ -1,0 +1,27 @@
+# Cornell Box - Classic scene with colored walls and objects
+A 0.15 255,255,255
+
+C 0,0,-8 0,0,1 60
+
+L 0,4,0 0.8 255,255,255
+
+# Floor (white)
+pl 0,-5,0 0,1,0 200,200,200
+
+# Ceiling (white)
+pl 0,5,0 0,-1,0 200,200,200
+
+# Back wall (white)
+pl 0,0,10 0,0,-1 200,200,200
+
+# Left wall (red)
+pl -5,0,0 1,0,0 200,50,50
+
+# Right wall (green)
+pl 5,0,0 -1,0,0 50,200,50
+
+# Sphere on the left
+sp -2,-3,5 3 200,200,200
+
+# Cylinder on the right
+cy 2,-5,6 0,1,0 2 4 200,180,100
