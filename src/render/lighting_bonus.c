@@ -22,10 +22,20 @@ static t_color	calc_diffuse(t_color obj, t_light light,
 	return (result);
 }
 
-static t_color	apply_lights(t_scene *scene, t_hit hit)
+static t_color	light_contribution(t_hit hit, t_light light,
+		t_vector ldir, t_vector view)
+{
+	t_color	diffuse;
+	t_color	specular;
+
+	diffuse = calc_diffuse(hit.color, light, hit.normal, ldir);
+	specular = calc_specular(hit, light, view, ldir);
+	return (add_colors(diffuse, specular));
+}
+
+static t_color	apply_lights(t_scene *scene, t_hit hit, t_vector view)
 {
 	t_color		total;
-	t_color		diffuse;
 	t_vector	light_dir;
 	t_vector	offset_point;
 	int			i;
@@ -39,9 +49,8 @@ static t_color	apply_lights(t_scene *scene, t_hit hit)
 		{
 			light_dir = vec_normalize(
 					vec_subtract(scene->lights[i].position, hit.point));
-			diffuse = calc_diffuse(hit.color, scene->lights[i],
-					hit.normal, light_dir);
-			total = add_colors(total, diffuse);
+			total = add_colors(total,
+					light_contribution(hit, scene->lights[i], light_dir, view));
 		}
 		i++;
 	}
@@ -50,14 +59,12 @@ static t_color	apply_lights(t_scene *scene, t_hit hit)
 
 t_color	calculate_lighting(t_scene *scene, t_hit hit, t_ray ray)
 {
-	t_color	ambient;
-	t_color	diffuse;
-	t_color	final;
+	t_color		ambient;
+	t_color		lights;
+	t_vector	view;
 
-	(void)ray;
+	view = vec_normalize(vec_negate(ray.direction));
 	ambient = calc_ambient(hit.color, scene->ambient);
-	diffuse = apply_lights(scene, hit);
-	final = add_colors(ambient, diffuse);
-	final = clamp_color(final);
-	return (final);
+	lights = apply_lights(scene, hit, view);
+	return (clamp_color(add_colors(ambient, lights)));
 }

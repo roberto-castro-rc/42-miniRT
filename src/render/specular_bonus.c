@@ -1,17 +1,15 @@
 #include "minirt_bonus.h"
 
-/*
-** calc_specular - stub for Step 2 (Phong specular bonus)
-** Will compute specular highlight:
-**   R = reflect(-L, N)
-**   spec = pow(max(dot(R, V), 0), SHININESS) * brightness
-*/
 t_color	calc_specular(t_hit hit, t_light light,
 		t_vector view, t_vector ldir)
 {
-	(void)hit;
-	(void)light;
-	(void)view;
-	(void)ldir;
-	return ((t_color){0, 0, 0});
+	t_vector	reflect_dir;
+	double	spec;
+	t_color	result;
+
+	reflect_dir = vec_reflect(vec_negate(ldir), hit.normal);
+	spec = fmax(0.0, vec_dot(reflect_dir, view));
+	spec = pow(spec, SHININESS) * light.brightness;
+	result = scale_color(light.color, spec);
+	return (result);
 }
