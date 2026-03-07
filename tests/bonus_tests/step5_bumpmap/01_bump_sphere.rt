@@ -1,0 +1,10 @@
+# Step 5 Test: Bump-mapped sphere (procedural noise)
+# MANDATORY: Smooth shading
+# BONUS:     Surface appears rough/bumpy due to normal perturbation
+A 0.15 255,255,255
+C 0,2,-10 0,0,1 60
+
+L 5,8,-3 0.8 255,255,255
+
+sp 0,1,5 4 200,150,100
+pl 0,-1,0 0,1,0 180,180,180

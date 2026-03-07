@@ -1,0 +1,19 @@
+# Step 3 Test: Multiple cones — ice cream scene
+# MANDATORY: Parse error
+# BONUS:     Three cones pointing up like ice cream cones with sphere scoops
+A 0.2 255,255,255
+C 0,5,-15 0,-0.1,1 70
+
+L -5,12,-5 0.5 255,200,150
+L  5,12,-5 0.5 150,200,255
+
+cn -3,-1,5 0,1,0 15 3 220,180,120
+sp -3,2.5,5 1.2 255,200,200
+
+cn  0,-1,7 0,1,0 15 3 220,180,120
+sp  0,2.5,7 1.2 200,255,200
+
+cn  3,-1,5 0,1,0 15 3 220,180,120
+sp  3,2.5,5 1.2 200,200,255
+
+pl 0,-1,0 0,1,0 160,160,160

@@ -1,0 +1,11 @@
+# Step 4 Test: Checkerboard sphere
+# MANDATORY: Solid red sphere
+# BONUS:     Sphere with black/red checkerboard pattern
+# NOTE: material field (if parsed) or shader flag indicates checker
+A 0.2 255,255,255
+C 0,2,-10 0,0,1 60
+
+L 5,8,-3 0.8 255,255,255
+
+sp 0,1,5 4 255,50,50
+pl 0,-1,0 0,1,0 180,180,180

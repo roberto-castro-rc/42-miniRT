@@ -1,0 +1,11 @@
+# Step 1 Test: Warm vs cold light contrast
+# MANDATORY: Only warm light
+# BONUS:     Warm left + cold right → dramatic contrast
+A 0.05 255,255,255
+C 0,3,-12 0,0,1 60
+
+L -10,8,5 0.7 255,180,80
+L  10,8,5 0.7 80,180,255
+
+sp 0,1,5 3 220,220,220
+cy 0,-2,5 0,1,0 8 0.3 150,150,150

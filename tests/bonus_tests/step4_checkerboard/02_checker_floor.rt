@@ -1,0 +1,11 @@
+# Step 4 Test: Checkerboard floor (plane)
+# MANDATORY: Solid gray floor
+# BONUS:     Classic black-white checkerboard floor
+A 0.2 255,255,255
+C 0,6,-12 0,-0.2,1 70
+
+L 0,10,-5 0.7 255,255,255
+
+pl 0,-1,0 0,1,0 200,200,200
+sp -2,1,5 2 255,100,100
+sp  2,1,7 2 100,100,255

@@ -1,0 +1,10 @@
+# Step 3 Test: Basic upright cone
+# MANDATORY: Parse error (unknown identifier "cn")
+# BONUS:     Renders a cone standing on the ground
+A 0.2 255,255,255
+C 0,4,-10 0,-0.1,1 70
+
+L 5,10,-5 0.8 255,255,255
+
+cn 0,-1,5 0,1,0 30 4 255,180,50
+pl 0,-1,0 0,1,0 180,180,180

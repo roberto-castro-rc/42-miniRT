@@ -1,0 +1,10 @@
+# Step 5 Test: Bump-mapped plane (brick-like pattern)
+# MANDATORY: Flat smooth plane
+# BONUS:     Plane appears to have surface texture
+A 0.15 255,255,255
+C 0,5,-10 0,-0.15,1 70
+
+L -3,10,-3 0.7 255,255,255
+
+pl 0,-1,0 0,1,0 200,150,120
+sp 0,1,5 2 255,100,100

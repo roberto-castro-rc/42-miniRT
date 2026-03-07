@@ -1,0 +1,14 @@
+# Step 2 Test: Specular on multiple spheres — colored highlights
+# MANDATORY: All spheres look flat
+# BONUS:     Each sphere has a colored specular hotspot from its nearest light
+A 0.1 255,255,255
+C 0,4,-14 0,-0.1,1 60
+
+L -6,10,0  0.7 255,150,150
+L  6,10,0  0.7 150,150,255
+L  0,10,10 0.6 150,255,150
+
+sp -3,1,5 2.5 220,220,220
+sp  3,1,5 2.5 220,220,220
+sp  0,1,9 2.5 220,220,220
+pl 0,-1,0 0,1,0 150,150,150

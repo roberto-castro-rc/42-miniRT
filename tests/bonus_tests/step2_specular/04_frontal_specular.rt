@@ -1,0 +1,9 @@
+# Step 2 Test: Frontal light — max specular toward camera
+# MANDATORY: Sphere is evenly lit (diffuse only)
+# BONUS:     Strong white hotspot in center of sphere
+A 0.1 255,255,255
+C 0,0,-10 0,0,1 50
+
+L 0,0,-8 0.9 255,255,255
+
+sp 0,0,5 4 50,50,200

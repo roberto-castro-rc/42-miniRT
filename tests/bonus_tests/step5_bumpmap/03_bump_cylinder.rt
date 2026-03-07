@@ -1,0 +1,10 @@
+# Step 5 Test: Bump-mapped cylinder (like a tree trunk)
+# MANDATORY: Smooth cylinder
+# BONUS:     Cylinder surface looks rough, bark-like
+A 0.15 255,255,255
+C 0,3,-10 0,0,1 70
+
+L 4,8,-3 0.8 255,250,230
+
+cy 0,-1,5 0,1,0 2 5 140,100,60
+pl 0,-1,0 0,1,0 100,160,80

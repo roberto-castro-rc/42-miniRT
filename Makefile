@@ -204,4 +204,48 @@ demo3: $(NAME)
 	@echo "$(GREEN)Running advanced demo...$(RESET)"
 	@./$(NAME) tests/level3_advanced/02_snowman.rt
 
-.PHONY: all clean fclean re bonus libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
+# =============================================================================
+# Bonus test rules
+# =============================================================================
+
+test-bonus-step1: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step1
+
+test-bonus-step2: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step2
+
+test-bonus-step3: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step3
+
+test-bonus-step4: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step4
+
+test-bonus-step5: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step5
+
+test-bonus-all: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh all
+
+test-bonus-compare:
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh compare
+
+test-bonus-progress: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh progress
+
+test-bonus-leak: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh leak
+
+test-bonus-menu: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh
+
+.PHONY: all clean fclean re bonus libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3 test-bonus-step1 test-bonus-step2 test-bonus-step3 test-bonus-step4 test-bonus-step5 test-bonus-all test-bonus-compare test-bonus-progress test-bonus-leak test-bonus-menu

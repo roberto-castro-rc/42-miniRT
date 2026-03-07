@@ -1,0 +1,11 @@
+# Step 3 Test: Cone next to cylinder (shape comparison)
+# MANDATORY: Parse error on "cn"
+# BONUS:     Cone and cylinder side by side
+A 0.15 255,255,255
+C 0,5,-14 0,-0.1,1 70
+
+L 0,12,-5 0.8 255,255,255
+
+cy -3,-1,5 0,1,0 2 4 100,200,100
+cn  3,-1,5 0,1,0 25 4 200,100,100
+pl 0,-1,0 0,1,0 180,180,180

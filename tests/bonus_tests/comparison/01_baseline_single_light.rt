@@ -1,0 +1,11 @@
+# Comparison scene A: Single light (identical in both builds)
+# Used as BASELINE — mandatory and bonus should look the same
+A 0.2 255,255,255
+C 0,3,-12 0,-0.1,1 70
+
+L 5,10,-5 0.7 255,255,255
+
+sp -2,1,4 2.5 255,80,80
+sp  2,1,7 2.5 80,80,255
+cy 0,-1,10 0,1,0 1.5 3 80,200,80
+pl 0,-1,0 0,1,0 180,180,180
