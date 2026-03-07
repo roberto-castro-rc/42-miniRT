@@ -37,6 +37,42 @@ SRCS		= src/core/main.c \
 
 OBJS		= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
+# Bonus source files
+BONUS_SRCS	= src/core/main_bonus.c \
+		  src/core/cleanup_bonus.c \
+		  src/core/error_bonus.c \
+		  src/scene/init_scene_bonus.c \
+		  src/scene/camera_bonus.c \
+		  src/parser/parse_scene_bonus.c \
+		  src/parser/parse_elements_bonus.c \
+		  src/parser/parse_objects_bonus.c \
+		  src/parser/parse_sphere_bonus.c \
+		  src/parser/parse_utils_bonus.c \
+		  src/parser/ft_atod_bonus.c \
+		  src/parser/validate_bonus.c \
+		  src/parser/parse_cone_bonus.c \
+		  src/math/vec_basic_bonus.c \
+		  src/math/vec_products_bonus.c \
+		  src/math/vec_utils_bonus.c \
+		  src/math/vec_reflect_bonus.c \
+		  src/render/render_bonus.c \
+		  src/render/ray_trace_bonus.c \
+		  src/render/lighting_bonus.c \
+		  src/render/shadows_bonus.c \
+		  src/render/specular_bonus.c \
+		  src/shapes/intersect_sphere_bonus.c \
+		  src/shapes/intersect_plane_bonus.c \
+		  src/shapes/intersect_cylinder_bonus.c \
+		  src/shapes/cylinder_utils_bonus.c \
+		  src/shapes/intersect_cone_bonus.c \
+		  src/shapes/cone_utils_bonus.c \
+		  src/utils/color_bonus.c \
+		  src/mlx/mlx_init_bonus.c \
+		  src/mlx/mlx_events_bonus.c \
+		  src/mlx/mlx_utils_bonus.c
+
+BONUS_OBJS	= $(patsubst %.c,$(OBJ_DIR)/%.o,$(BONUS_SRCS))
+
 # Colors
 GREEN		= \033[0;32m
 RED			= \033[0;31m
@@ -76,6 +112,12 @@ fclean: clean
 	@rm -rf lib/MLX42/build
 
 re: fclean all
+
+# Bonus build
+bonus: libmlx libft $(BONUS_OBJS)
+	@echo "$(GREEN)Linking $(NAME) (bonus)...$(RESET)"
+	@$(CC) $(BONUS_OBJS) $(LDFLAGS) -o $(NAME)
+	@echo "$(GREEN)$(NAME) bonus created successfully!$(RESET)"
 
 # =============================================================================
 # Test rules
@@ -162,4 +204,4 @@ demo3: $(NAME)
 	@echo "$(GREEN)Running advanced demo...$(RESET)"
 	@./$(NAME) tests/level3_advanced/02_snowman.rt
 
-.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
+.PHONY: all clean fclean re bonus libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
