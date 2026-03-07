@@ -1,0 +1,7 @@
+# EVAL - Brightness 2/2: luz vertical, esfera, plano → sombra da esfera no chão
+# Câmera de lado para ver a cena completa: esfera, chão e sombra
+A 0.1 255,255,255
+C -8,2,0 1,0,0 70
+L 0,8,0 0.9 255,255,255
+sp 0,2,0 2 220,220,220
+pl 0,-1,0 0,1,0 180,140,100

@@ -1,0 +1,8 @@
+# EVAL - Camera random: câmera fora de qualquer eixo/diagonal, apontando para {0,0,0}
+# Posição: (-7, 4, -5) → direção normalizada: (0.727, -0.415, 0.546)
+A 0.2 255,255,255
+C -7,4,-5 0.727,-0.415,0.546 70
+L 3,6,-2 0.8 255,255,255
+sp 0,0,0 2 255,80,80
+pl 0,-4,0 0,1,0 80,80,80
+cy 2,0,2 0,1,0 1 4 80,200,120

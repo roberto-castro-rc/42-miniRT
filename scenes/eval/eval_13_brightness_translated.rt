@@ -1,0 +1,5 @@
+# EVAL - Brightness 1/2: esfera transladada {3,2,0}, luz lateral para verificar brilho correto
+A 0.1 255,255,255
+C 3,2,-8 0,0,1 70
+L -2,2,0 0.9 255,255,255
+sp 3,2,0 2 200,200,200

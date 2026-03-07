@@ -1,0 +1,5 @@
+# EVAL - Basic Shapes: cilindro ao longo do eixo Y, câmera frontal
+A 0.2 255,255,255
+C 0,0,-8 0,0,1 70
+L -4,4,-2 0.8 255,255,255
+cy 0,0,0 0,1,0 2 6 80,200,120

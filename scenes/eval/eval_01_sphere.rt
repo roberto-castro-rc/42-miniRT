@@ -1,0 +1,5 @@
+# EVAL - Basic Shapes: esfera em {0,0,0}, câmera frontal
+A 0.2 255,255,255
+C 0,0,-5 0,0,1 70
+L -3,3,-2 0.8 255,255,255
+sp 0,0,0 2 255,80,80
