@@ -12,6 +12,7 @@ SRCS		= src/core/main.c \
 		  src/core/cleanup.c \
 		  src/core/error.c \
 		  src/parser/parse_scene.c \
+		  src/parser/parse_scene_helpers.c \
 		  src/parser/parse_elements.c \
 		  src/parser/parse_objects.c \
 		  src/parser/parse_sphere.c \

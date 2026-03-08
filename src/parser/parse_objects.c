@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_objects.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/07 17:09:07 by lpaula-n          #+#    #+#             */
+/*   Updated: 2026/03/07 17:11:05 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static int	add_plane(t_scene *scene, t_plane pl)
@@ -28,7 +40,7 @@ int	parse_plane(char *line, t_scene *scene)
 		|| !parse_color(parts[3], &pl.color))
 		return (free_split(parts), error_exit("Plane: invalid data"), 0);
 	if (!validate_normalized(pl.normal))
-		return (free_split(parts), error_exit("Plane: normal not normalized"), 0);
+		return (free_split(parts), error_exit("Plane: not normalized"), 0);
 	pl.normal = vec_normalize(pl.normal);
 	free_split(parts);
 	return (add_plane(scene, pl));

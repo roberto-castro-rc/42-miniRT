@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/07 17:20:34 by lpaula-n          #+#    #+#             */
+/*   Updated: 2026/03/07 21:01:48 by lpaula-n         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -99,6 +111,9 @@ typedef struct s_scene
 
 /* Parsing functions */
 int			parse_scene(char *filename, t_scene *scene);
+int			parse_ambient_flag(char **parts, t_scene *scene, int *flags);
+int			parse_camera_flag(char **parts, t_scene *scene, int *flags);
+int			parse_light_flag(char *line, t_scene *scene, int *flags);
 int			parse_ambient(char **parts, t_scene *scene);
 int			parse_camera(char **parts, t_scene *scene);
 int			parse_light(char *line, t_scene *scene);
