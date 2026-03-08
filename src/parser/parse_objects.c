@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:09:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/07 17:11:05 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2026/03/07 22:36:50 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,9 @@ int	parse_cylinder(char *line, t_scene *scene)
 			error_exit("Cylinder: axis not normalized"), 0);
 	cy.axis = vec_normalize(cy.axis);
 	cy.diameter = parse_double(parts[3], &error);
+	if (error || cy.diameter <= 0 || cy.height <= 0)
+		return (free_split(parts),
+			error_exit("Cylinder dimensions must be > 0"), 0);
 	cy.height = parse_double(parts[4], &error);
 	if (error || cy.diameter <= 0 || cy.height <= 0)
 		return (free_split(parts),

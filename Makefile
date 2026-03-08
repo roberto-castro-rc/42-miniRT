@@ -147,7 +147,7 @@ valgrind: $(NAME)
 		echo "  Or use: make test-leak  (runs all leak tests)"; \
 	else \
 		valgrind --leak-check=full --show-leak-kinds=definite,indirect,possible --track-origins=yes \
-		--track-fds=yes --error-exitcode=42 --suppressions=mlx.supp ./$(NAME) $(SCENE); \
+		--error-exitcode=42 --suppressions=mlx.supp ./$(NAME) $(SCENE); \
 	fi
 
 # Quick test scenes

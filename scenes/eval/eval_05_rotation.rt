@@ -1,6 +1,9 @@
 # EVAL - Rotation: cilindro com 90° de rotação no eixo Z → agora alinhado ao eixo X
 # Eixo original era 0,1,0 (Y). Rotação de PI/2 ao longo de Z → eixo torna-se 1,0,0 (X)
 A 0.2 255,255,255
-C 0,0,-8 0,0,1 70
+# C 0,0,-8 0,0,1 70
+C 0,0,-8 0,0,1 120
 L -4,4,-2 0.8 255,255,255
-cy 0,0,0 1,0,0 2 8 255,160,40
+#cy 0,0,0 1,0,0 2 8 255,160,40
+cy  0,-3,0 0,1,0 9 8 2,160,40
+    # 0,0,0| 0,1,0| 2| 8| 2,160,40|
