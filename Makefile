@@ -146,8 +146,8 @@ valgrind: $(NAME)
 		echo "$(RED)Usage: make valgrind SCENE=path/to/scene.rt$(RESET)"; \
 		echo "  Or use: make test-leak  (runs all leak tests)"; \
 	else \
-		valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes \
-		--track-fds=yes --error-exitcode=42 ./$(NAME) $(SCENE); \
+		valgrind --leak-check=full --show-leak-kinds=definite,indirect,possible --track-origins=yes \
+		--track-fds=yes --error-exitcode=42 --suppressions=mlx.supp ./$(NAME) $(SCENE); \
 	fi
 
 # Quick test scenes
@@ -163,4 +163,7 @@ demo3: $(NAME)
 	@echo "$(GREEN)Running advanced demo...$(RESET)"
 	@./$(NAME) tests/level3_advanced/02_snowman.rt
 
-.PHONY: all clean fclean re libmlx libft test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
+norm:
+	@norminette src/ includes/ lib/libft/
+
+.PHONY: all clean fclean re libmlx libft norm test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3

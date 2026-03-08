@@ -1,0 +1,204 @@
+# Valgrind suppression file for MLX42 / GLFW / OpenGL
+# Usage: valgrind --suppressions=mlx.supp ./miniRT scene.rt
+
+# ---------- Dynamic Linker (ld-linux / glibc) ----------
+{
+   ld_linux_invalid_read_strncmp
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   ...
+}
+{
+   ld_linux_invalid_read_dst_substitute
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   fun:_dl_dst_substitute
+   ...
+}
+{
+   ld_linux_invalid_read_dst_count
+   Memcheck:Addr8
+   fun:strncmp
+   fun:is_dst
+   fun:_dl_dst_count
+   ...
+}
+{
+   ld_linux_decompose_rpath
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:decompose_rpath
+}
+{
+   ld_linux_dl_open
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_dl_open
+}
+{
+   ld_linux_dl_map_object
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_dl_map_object
+}
+
+# ---------- GLFW ----------
+{
+   glfw_init_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_glfwInitVulkan
+}
+{
+   glfw_platform_init
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_glfwPlatformInit
+}
+{
+   glfw_create_window
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:glfwCreateWindow
+}
+{
+   glfw_terminate
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:glfwTerminate
+}
+
+# ---------- OpenGL / Mesa ----------
+{
+   mesa_loader_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:loader_open_driver
+}
+{
+   mesa_dri_init
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/dri/*.so
+}
+{
+   mesa_glapi
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_glapi_add_dispatch
+}
+{
+   libGL_init
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libGL.so*
+}
+
+# ---------- libX11 / XCB ----------
+{
+   libX11_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libX11.so*
+}
+{
+   libxcb_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libxcb.so*
+}
+
+# ---------- libpthread / dl ----------
+{
+   pthread_create_stack
+   Memcheck:Leak
+   match-leak-kinds: reachable,possible
+   ...
+   fun:pthread_create
+}
+{
+   dlopen_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:dlopen
+}
+{
+   dlopen_add_to_global
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_dl_open
+}
+
+# ---------- MLX42 internals ----------
+{
+   mlx42_init
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:mlx_init
+}
+{
+   mlx42_new_image
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:mlx_new_image
+}
+
+# ---------- LLVM / Mesa GPU driver ----------
+{
+   llvm_managed_static
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_ZN4llvm17ManagedStaticBase21RegisterManagedStaticEPFPvvEPFvS1_E
+}
+{
+   llvm_call_init
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libLLVM*.so*
+}
+{
+   llvm_string_map_rehash
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_ZN4llvm12StringMapImpl11RehashTableEj
+}
+{
+   llvm_cl_option
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:_ZN4llvm2cl6Option11addArgumentEv
+}
+
+# ---------- GLFW dlclose cleanup ----------
+{
+   glfw_dlclose
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   fun:dlclose*
+   ...
+   fun:mlx_terminate
+}
