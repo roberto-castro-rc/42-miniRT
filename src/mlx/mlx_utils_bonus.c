@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   mlx_utils_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:08:27 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/09 18:17:50 by rpaulo-c         ###   ########.fr       */
+/*   Created: 2026/03/09 18:05:16 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:17:39 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
-void	cleanup_scene(t_scene *scene)
+uint32_t	color_to_int(t_color color)
 {
-	if (scene->spheres)
-		free(scene->spheres);
-	if (scene->planes)
-		free(scene->planes);
-	if (scene->cylinders)
-		free(scene->cylinders);
-	if (scene->lights)
-		free(scene->lights);
-	if (scene->image)
-		mlx_delete_image(scene->mlx, scene->image);
-	if (scene->mlx)
-		mlx_terminate(scene->mlx);
+	return ((color.r << 24) | (color.g << 16) | (color.b << 8) | 0xFF);
+}
+
+void	put_pixel(mlx_image_t *img, int x, int y, t_color color)
+{
+	uint32_t	pixel_color;
+
+	pixel_color = color_to_int(color);
+	mlx_put_pixel(img, x, y, pixel_color);
 }

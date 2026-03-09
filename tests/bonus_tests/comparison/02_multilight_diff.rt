@@ -1,0 +1,14 @@
+# Comparison scene B: Multi-light (shows multi-light difference)
+# MANDATORY: Only uses 1st light → darker, one-directional
+# BONUS:     Uses all 3 lights → brighter, multi-directional, colored
+A 0.1 200,220,255
+C 0,5,-14 0,-0.1,1 70
+
+L -8,10,-3 0.5 255,200,150
+L  8,10,-3 0.5 150,200,255
+L  0,10,8  0.4 200,255,200
+
+sp -3,1,4 2.5 220,220,220
+sp  3,1,7 2.5 220,220,220
+cy 0,-1,10 0,1,0 1.5 3 220,220,220
+pl 0,-1,0 0,1,0 180,180,180

@@ -1,0 +1,14 @@
+# Step 1 Test: Multiple shadows from multiple lights
+# MANDATORY: Only 1 light → 1 shadow direction
+# BONUS:     3 lights → 3 shadow directions, partially lit zones
+A 0.1 255,255,255
+C 0,8,-15 0,-0.2,1 70
+
+L -8,12,0  0.5 255,200,200
+L  8,12,0  0.5 200,200,255
+L  0,12,10 0.4 200,255,200
+
+sp 0,2,5 2 255,255,255
+sp -4,0.5,8 1.5 255,100,100
+sp  4,0.5,8 1.5 100,100,255
+pl 0,-1,0 0,1,0 200,200,200

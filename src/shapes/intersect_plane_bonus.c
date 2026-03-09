@@ -1,0 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect_plane_bonus.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/09 18:09:43 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:09:44 by rpaulo-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt_bonus.h"
+
+t_hit	intersect_plane(t_ray ray, t_plane pl, double closest)
+{
+	double		denom;
+	double		t;
+	t_vector	diff;
+	t_hit		hit;
+
+	denom = vec_dot(ray.direction, pl.normal);
+	if (fabs(denom) < EPSILON)
+		return (create_no_hit());
+	diff = vec_subtract(pl.point, ray.origin);
+	t = vec_dot(diff, pl.normal) / denom;
+	if (t < EPSILON || t >= closest)
+		return (create_no_hit());
+	hit.hit = 1;
+	hit.t = t;
+	hit.point = ray_at(ray, t);
+	hit.normal = pl.normal;
+	if (vec_dot(hit.normal, ray.direction) > 0)
+		hit.normal = vec_negate(hit.normal);
+	hit.color = pl.color;
+	hit.material = pl.material;
+	hit.type = HIT_PLANE;
+	return (hit);
+}

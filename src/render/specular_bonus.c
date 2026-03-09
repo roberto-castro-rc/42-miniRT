@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   specular_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:08:27 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/09 18:17:50 by rpaulo-c         ###   ########.fr       */
+/*   Created: 2026/03/09 18:10:08 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:10:09 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
-void	cleanup_scene(t_scene *scene)
+t_color	calc_specular(t_hit hit, t_light light,
+		t_vector view, t_vector ldir)
 {
-	if (scene->spheres)
-		free(scene->spheres);
-	if (scene->planes)
-		free(scene->planes);
-	if (scene->cylinders)
-		free(scene->cylinders);
-	if (scene->lights)
-		free(scene->lights);
-	if (scene->image)
-		mlx_delete_image(scene->mlx, scene->image);
-	if (scene->mlx)
-		mlx_terminate(scene->mlx);
+	t_vector	reflect_dir;
+	double		spec;
+	t_color		result;
+
+	reflect_dir = vec_reflect(vec_negate(ldir), hit.normal);
+	spec = fmax(0.0, vec_dot(reflect_dir, view));
+	spec = pow(spec, SHININESS) * light.brightness;
+	result = scale_color(light.color, spec);
+	return (result);
 }

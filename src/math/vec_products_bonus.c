@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   vec_products_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:08:27 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/09 18:17:50 by rpaulo-c         ###   ########.fr       */
+/*   Created: 2026/03/09 18:04:31 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:17:47 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "vectors_bonus.h"
 
-void	cleanup_scene(t_scene *scene)
+double	vec_dot(t_vector a, t_vector b)
 {
-	if (scene->spheres)
-		free(scene->spheres);
-	if (scene->planes)
-		free(scene->planes);
-	if (scene->cylinders)
-		free(scene->cylinders);
-	if (scene->lights)
-		free(scene->lights);
-	if (scene->image)
-		mlx_delete_image(scene->mlx, scene->image);
-	if (scene->mlx)
-		mlx_terminate(scene->mlx);
+	return (a.x * b.x + a.y * b.y + a.z * b.z);
+}
+
+t_vector	vec_cross(t_vector a, t_vector b)
+{
+	t_vector	result;
+
+	result.x = a.y * b.z - a.z * b.y;
+	result.y = a.z * b.x - a.x * b.z;
+	result.z = a.x * b.y - a.y * b.x;
+	return (result);
 }

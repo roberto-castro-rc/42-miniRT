@@ -1,0 +1,11 @@
+# Step 1 Test: Colored ambient light
+# MANDATORY: ambient color ignored → gray environment
+# BONUS:     ambient.color used → scene has warm orange tint in shadows
+A 0.3 255,180,100
+C 0,4,-10 0,-0.1,1 70
+
+L 5,10,0 0.6 255,255,255
+
+sp -2,1,5 2.5 200,200,200
+sp  2,1,5 2.5 200,200,200
+pl 0,-1,0 0,1,0 180,180,180
