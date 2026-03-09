@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 00:00:00 by rpaulo-c          #+#    #+#             */
-/*   Updated: 2026/03/07 17:56:18 by marvin           ###   ########.fr       */
+/*   Updated: 2026/03/09 13:06:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,11 @@ t_hit		create_no_hit(void);
 t_hit		create_body_hit(t_ray ray, t_cylinder cy, double t);
 int			check_body_hit(t_ray ray, t_cylinder cy, double t, double cl);
 t_hit		check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl);
+
+/* Cone utilities */
+t_hit		create_cone_body_hit(t_ray ray, t_cone cn, double t);
+int			check_cone_body(t_ray ray, t_cone cn, double t, double cl);
+t_hit		check_cone_cap(t_ray ray, t_cone cn, t_vector cap, double cl);
 
 /* Lighting functions */
 t_color		calculate_lighting(t_scene *scene, t_hit hit, t_ray ray);
