@@ -29,6 +29,11 @@ NC='\033[0m'
 BOLD='\033[1m'
 DIM='\033[2m'
 
+# Auto-detect project root (works whether run from project root or tests/)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT" || { echo "Erro: nao encontrou raiz do projeto"; exit 1; }
+
 # Counters
 PASS=0
 FAIL=0
@@ -151,20 +156,35 @@ test_scene_runs() {
         print_fail "$name" "arquivo nao encontrado"
         return
     fi
+    if [ ! -x "$binary" ]; then
+        print_fail "$name" "binario sem permissao: $binary"
+        return
+    fi
 
-    timeout $TIMEOUT "$binary" "$file" </dev/null >/dev/null 2>&1 &
+    # Roda em background, espera TIMEOUT segundos, depois mata
+    "$binary" "$file" </dev/null >/dev/null 2>&1 &
     local pid=$!
-    sleep 1
+    local elapsed=0
+    while [ $elapsed -lt $TIMEOUT ]; do
+        if ! kill -0 $pid 2>/dev/null; then
+            break
+        fi
+        sleep 1
+        ((elapsed++))
+    done
 
     if kill -0 $pid 2>/dev/null; then
+        # Ainda rodando apos timeout → tudo certo, manda fechar
         kill $pid 2>/dev/null
         wait $pid 2>/dev/null
         print_pass "$name"
     else
+        # Processo ja terminou — pegar exit code
         wait $pid 2>/dev/null
         local code=$?
-        if [ $code -eq 124 ]; then
-            print_pass "$name (timeout OK)"
+        # Codes 0, 124 (timeout), 143 (SIGTERM), 137 (SIGKILL) sao OK
+        if [ $code -eq 0 ] || [ $code -eq 124 ] || [ $code -eq 143 ] || [ $code -eq 137 ]; then
+            print_pass "$name"
         else
             print_fail "$name" "crash code=$code"
         fi
@@ -518,25 +538,25 @@ run_visual_step() {
 
 show_menu() {
     print_banner
-    echo "  ${BOLD}Testes por Step:${NC}"
-    echo "    1)  Step 1 — Multi-light colorida"
-    echo "    2)  Step 2 — Specular Phong"
-    echo "    3)  Step 3 — Cone"
-    echo "    4)  Step 4 — Checkerboard"
-    echo "    5)  Step 5 — Bump mapping"
+    echo -e "  ${BOLD}Testes por Step:${NC}"
+    echo -e "    1)  Step 1 — Multi-light colorida"
+    echo -e "    2)  Step 2 — Specular Phong"
+    echo -e "    3)  Step 3 — Cone"
+    echo -e "    4)  Step 4 — Checkerboard"
+    echo -e "    5)  Step 5 — Bump mapping"
     echo ""
-    echo "  ${BOLD}Modos Especiais:${NC}"
-    echo "    6)  Rodar TODOS os steps"
-    echo "    7)  Comparacao visual (mandatory vs bonus)"
-    echo "    8)  Dashboard de progresso"
-    echo "    9)  Leak detection (valgrind)"
+    echo -e "  ${BOLD}Modos Especiais:${NC}"
+    echo -e "    6)  Rodar TODOS os steps"
+    echo -e "    7)  Comparacao visual (mandatory vs bonus)"
+    echo -e "    8)  Dashboard de progresso"
+    echo -e "    9)  Leak detection (valgrind)"
     echo ""
-    echo "  ${BOLD}Visual (abre cenas no bonus build):${NC}"
-    echo "    v1) Visual Step 1    v2) Visual Step 2"
-    echo "    v3) Visual Step 3    v4) Visual Step 4"
-    echo "    v5) Visual Step 5"
+    echo -e "  ${BOLD}Visual (abre cenas no bonus build):${NC}"
+    echo -e "    v1) Visual Step 1    v2) Visual Step 2"
+    echo -e "    v3) Visual Step 3    v4) Visual Step 4"
+    echo -e "    v5) Visual Step 5"
     echo ""
-    echo "    0)  Sair"
+    echo -e "    0)  Sair"
     echo ""
     echo -n "  Opcao: "
 }

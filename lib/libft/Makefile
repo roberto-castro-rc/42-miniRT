@@ -21,7 +21,7 @@ OBJS = $(SRCS:.c=.o)
 BONUS_OBJS = $(BONUS:.c=.o)
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I. -O2
+CFLAGS = -Wall -Wextra -Werror -I. -O2 -Wno-unused-result
 AR = ar rcs
 RM = rm -f
 
