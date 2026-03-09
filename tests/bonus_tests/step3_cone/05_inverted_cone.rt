@@ -1,0 +1,10 @@
+# Step 3 Test: Inverted cone (pointing down like a funnel)
+# MANDATORY: Parse error
+# BONUS:     Upside-down cone shape
+A 0.2 255,255,255
+C 0,2,-10 0,0,1 70
+
+L 3,8,-3 0.8 255,255,255
+
+cn 0,4,5 0,-1,0 35 4 150,100,200
+pl 0,-1,0 0,1,0 180,180,180

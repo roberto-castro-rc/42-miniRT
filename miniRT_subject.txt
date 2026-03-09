@@ -1,0 +1,573 @@
+﻿miniRT
+Meu primeiro RayTracer com a MiniLibX
+
+Preâmbulo: Este projeto é uma introdução ao belo mundo do Raytracing.
+Uma vez concluído, você será capaz de renderizar imagens simples geradas por
+computador e nunca mais terá medo de implementar fórmulas matemáticas.
+
+Versão: 10.0
+
+
+
+Sumário
+I Introdução 2
+
+II Instruções Comuns 3
+
+III Instruções para IA 5
+
+IV Parte obrigatória - miniRT 8
+
+V Requisitos do Readme 13
+
+VI Parte bônus 14
+
+VII Exemplos 16
+
+VIII Entrega e avaliação por pares 21
+
+1
+
+
+
+Capítulo I
+Introdução
+
+Quando se trata de renderizar imagens tridimensionais geradas por computador, existem
+duas abordagens possíveis: "Rasterização", que é usada por quase todos os mecanismos
+gráficos devido à sua eficiência, e "Ray Tracing."
+
+O método "Ray Tracing", desenvolvido pela primeira vez em 1968 (mas aprimorado
+desde então), ainda é mais caro computacionalmente do que o método "Rasterização".
+Como resultado, ainda não está totalmente adaptado para casos de uso em tempo real,
+mas produz um grau de realismo visual muito maior.
+
+Figura I.1: As imagens acima são renderizadas com a técnica de ray tracing. Impressionante, não é?
+
+Antes mesmo de começar a produzir gráficos de tão alta qualidade, você deve dominar
+o básico: o miniRT é seu primeiro ray tracer codificado em C, normatizado, humilde, mas
+funcional.
+
+O principal objetivo do miniRT é provar a si mesmo que você pode implementar
+qualquer fórmula matemática ou física sem ser um matemático. Implementaremos apenas
+os recursos mais básicos de ray tracing aqui, então mantenha a calma, respire fundo e não
+entre em pânico! Após este projeto, você poderá exibir belas imagens para justificar o
+número de horas que você está gastando na escola.
+
+2
+
+
+
+Capítulo II
+Instruções Comuns
+
+• Seu projeto deve ser escrito em C.
+
+• Seu projeto deve ser escrito de acordo com a Norma. Se você tiver arquivos/funções
+bônus, eles serão incluídos na verificação da norma, e você receberá uma nota 0 se
+houver algum erro de norma.
+
+• Suas funções não devem sair inesperadamente (segmentation fault, bus error, double
+free, etc.) exceto por comportamento indefinido. Se isso ocorrer, seu projeto será
+considerado não funcional e receberá uma nota 0 durante a avaliação.
+
+• Toda memória alocada na heap deve ser liberada corretamente quando necessário.
+Vazamentos de memória não serão tolerados.
+
+• Se o enunciado exigir, você deve submeter um Makefile que compile seus arquivos
+fonte para a saída requerida com as flags -Wall, -Wextra, e -Werror, usando cc.
+Adicionalmente, seu Makefile não deve realizar re-links desnecessários.
+
+• Seu Makefile deve conter pelo menos as regras $(NAME), all, clean, fclean e re.
+
+• Para submeter bônus para seu projeto, você deve incluir uma regra bonus em seu
+Makefile, que adicionará todos os diversos headers, bibliotecas, ou funções que
+não são permitidas na parte principal do projeto. Os bônus devem ser colocados
+em arquivos _bonus.{c/h}, a menos que o enunciado especifique o contrário. A
+avaliação das partes obrigatórias e bônus é conduzida separadamente.
+
+• Se seu projeto permitir que você use sua libft, você deve copiar suas fontes e
+seu Makefile associado para uma pasta libft. O Makefile do seu projeto deve
+compilar a biblioteca usando seu Makefile, e então compilar o projeto.
+
+• Nós encorajamos você a criar programas de teste para seu projeto, mesmo que este
+trabalho não precise ser submetido e não será avaliado. Isso lhe dará a
+oportunidade de testar facilmente seu trabalho e o trabalho de seus colegas. Você
+achará esses testes especialmente úteis durante sua defesa. De fato, durante a
+defesa, você está livre para usar seus testes e/ou os testes do colega que você está
+avaliando.
+
+3
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+• Submeta seu trabalho para o repositório Git designado. Somente o trabalho no
+repositório Git será avaliado. Se o Deepthought for designado para avaliar seu
+trabalho, isso ocorrerá após as avaliações de seus colegas. Se um erro acontecer em
+qualquer seção do seu trabalho durante a avaliação do Deepthought, a avaliação
+será interrompida.
+
+4
+
+
+
+Capítulo III
+Instruções para IA
+
+● Contexto
+Durante sua jornada de aprendizado, a IA pode auxiliar em diversas tarefas. Dedique
+tempo para explorar as várias capacidades das ferramentas de IA e como elas podem
+apoiar seu trabalho. No entanto, sempre as utilize com cautela e avalie criticamente os
+resultados. Seja código, documentação, ideias ou explicações técnicas, você nunca pode
+ter certeza absoluta de que sua pergunta foi bem formulada ou que o conteúdo gerado é
+preciso. Seus colegas são um recurso valioso para ajudá-lo a evitar erros e pontos cegos.
+
+● Mensagem principal
+☛ Use a IA para reduzir tarefas repetitivas ou tediosas.
+
+☛ Desenvolva habilidades de prompt — tanto para codificação quanto para outras
+tarefas — que beneficiarão sua carreira futura.
+
+☛ Aprenda como os sistemas de IA funcionam para melhor antecipar e evitar riscos
+comuns, vieses e questões éticas.
+
+☛ Continue desenvolvendo habilidades técnicas e interpessoais trabalhando com seus
+colegas.
+
+☛ Use apenas conteúdo gerado por IA que você entenda completamente e pelo qual
+possa se responsabilizar.
+
+● Regras para o aluno:
+• Você deve dedicar tempo para explorar as ferramentas de IA e entender como elas
+
+funcionam, para que possa usá-las eticamente e reduzir potenciais vieses.
+
+• Você deve refletir sobre seu problema antes de criar o prompt — isso ajuda você a
+escrever prompts mais claros, detalhados e relevantes, usando vocabulário preciso.
+
+5
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+• Você deve desenvolver o hábito de verificar, revisar, questionar e testar sistemati-
+camente tudo o que for gerado por IA.
+
+• Você deve sempre buscar revisão por pares — não confie apenas em sua própria
+validação.
+
+● Resultados da fase:
+• Desenvolver habilidades de prompt tanto para uso geral quanto para áreas especí-
+
+ficas.
+
+• Aumentar sua produtividade com o uso eficaz de ferramentas de IA.
+
+• Continuar fortalecendo o pensamento computacional, resolução de problemas, adap-
+tabilidade e colaboração.
+
+● Comentários e exemplos:
+• Você encontrará regularmente situações — exames, avaliações e mais — onde você
+
+deve demonstrar compreensão real. Esteja preparado, continue desenvolvendo suas
+habilidades técnicas e interpessoais.
+
+• Explicar seu raciocínio e debater com colegas frequentemente revela lacunas em sua
+compreensão. Priorize a aprendizagem colaborativa.
+
+• As ferramentas de IA geralmente carecem do seu contexto específico e tendem a
+fornecer respostas genéricas. Seus colegas, que compartilham seu ambiente, podem
+oferecer insights mais relevantes e precisos.
+
+• Onde a IA tende a gerar a resposta mais provável, seus colegas podem fornecer
+perspectivas alternativas e nuances valiosas. Conte com eles como um ponto de
+verificação de qualidade.
+
+✓ Boa prática:
+
+Pergunto à IA: “Como testo uma função de ordenação?” Ela me dá algumas ideias.
+Eu as testo e reviso os resultados com um colega. Nós refinamos a abordagem juntos.
+
+✗ Má prática:
+
+Peço à IA para escrever uma função inteira, copio e colo no meu projeto. Durante a
+avaliação por pares, não consigo explicar o que ela faz ou porquê. Perco credibilidade
+— e reprovo no meu projeto.
+
+✓ Boa prática:
+
+6
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Uso a IA para ajudar a projetar um analisador sintático. Então, analiso a lógica com
+um colega. Detectamos dois erros e reescrevemos juntos — melhor, mais limpo e
+totalmente compreendido.
+
+✗ Má prática:
+
+Deixo o Copilot gerar meu código para uma parte importante do meu projeto. Ele
+compila, mas não consigo explicar como ele lida com pipes. Durante a avaliação, não
+consigo justificar e reprovo no meu projeto.
+
+7
+
+
+
+Capítulo IV
+Parte obrigatória - miniRT
+
+Nome do pro- miniRT
+grama
+Arquivos para en- Todos os seus arquivos
+tregar
+Makefile all, clean, fclean, re, bonus
+Argumentos uma cena no formato *.rt
+Funções externas
+autorizadas
+
+• open, close, read, write,
+printf, malloc, free, perror,
+strerror, exit.
+
+• Todas as funções da
+biblioteca math. (Página
+de manual: man math.h ou man
+3 math. Não se esqueça de
+compilar com a flag -lm).
+
+• Todas as funções da
+biblioteca MinilibX.
+
+• gettimeofday()
+Libft autorizada Sim
+Descrição O objetivo do seu programa é gerar imagens usando
+
+o protocolo Raytracing. Essas imagens geradas por
+computador representarão cada uma uma cena, vista
+de um ângulo e posição específicos, definida por
+objetos geométricos simples, e cada uma com seu
+próprio sistema de iluminação.
+
+As restrições são as seguintes:
+
+• Você deve usar a biblioteca miniLibX, seja a versão disponível no sistema opera-
+cional, ou a partir de suas fontes. Se você escolher trabalhar com as fontes, você
+precisará aplicar as mesmas regras para sua libft como aquelas escritas acima na
+parte de Instruções Comuns.
+
+8
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+• O gerenciamento da sua janela deve permanecer fluido: alternar para outra janela,
+minimizar, etc.
+
+• Você precisa de pelo menos esses três objetos geométricos simples: plano, esfera,
+cilindro.
+
+• Se aplicável, todas as possíveis interseções e o interior dos objetos devem ser tratados
+corretamente.
+
+• Seu programa deve ser capaz de redimensionar as propriedades exclusivas dos ob-
+jetos: diâmetro para uma esfera e a largura e altura para um cilindro.
+
+• Seu programa deve ser capaz de aplicar transformações de translação e rotação a
+objetos, luzes, e câmeras (exceto para esferas e luzes que não podem ser giradas).
+
+• Gerenciamento de luz: brilho do ponto de luz, sombras duras, iluminação ambi-
+ente (os objetos nunca estão completamente no escuro). Você deve implementar
+iluminação ambiente e difusa.
+
+• O programa exibe a imagem em uma janela e respeita as seguintes regras:
+
+◦ Pressionar ESC deve fechar a janela e encerrar o programa de forma limpa.
+
+◦ Clicar no X vermelho na moldura da janela deve fechar a janela e encerrar o
+programa de forma limpa.
+
+◦ O uso de images da biblioteca minilibX é altamente recomendado.
+
+• Seu programa deve receber como primeiro argumento um arquivo de descrição de
+cena com a extensão .rt.
+
+◦ Cada tipo de elemento pode ser separado por um ou mais finais de linha.
+
+◦ Cada tipo de informação de um elemento pode ser separado por um ou mais
+espaços.
+
+◦ Cada tipo de elemento pode ser definido em qualquer ordem no arquivo.
+
+◦ Elementos definidos por uma letra maiúscula só podem ser declarados uma
+vez na cena.
+
+9
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+◦ A primeira informação para cada elemento é o identificador de tipo (composto
+por um ou dois caracteres), seguido por todas as informações específicas para
+cada objeto em uma ordem estrita, como:
+
+◦ Iluminação ambiente:
+A 0.2 255,255,255
+
+∗ identificador: A
+∗ taxa de iluminação ambiente no intervalo [0.0,1.0]: 0.2
+∗ cores R, G, B no intervalo [0-255]: 255, 255, 255
+
+◦ Câmera:
+C -50.0,0,20 0,0,1 70
+
+∗ identificador: C
+∗ coordenadas x, y, z do ponto de vista: -50.0,0,20
+∗ Vetor de orientação 3D normalizado, no intervalo [-1,1] para cada eixo x,
+
+y, z: 0.0,0.0,1.0
+∗ FOV: Campo de visão horizontal em graus no intervalo [0,180]: 70
+
+◦ Luz:
+L -40.0,50.0,0.0 0.6 10,0,255
+
+∗ identificador: L
+∗ coordenadas x, y, z do ponto de luz: -40.0,50.0,0.0
+∗ a taxa de brilho da luz no intervalo [0.0,1.0]: 0.6
+∗ (não utilizado na parte obrigatória) cores R, G, B no intervalo [0-255]: 10,
+
+0, 255
+
+◦ Esfera:
+sp 0.0,0.0,20.6 12.6 10,0,255
+
+∗ identificador: sp
+∗ coordenadas x, y, z do centro da esfera: 0.0,0.0,20.6
+∗ o diâmetro da esfera: 12.6
+∗ cores R,G,B no intervalo [0-255]: 10, 0, 255
+
+10
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+◦ Plano:
+pl 0.0,0.0,-10.0 0.0,1.0,0.0 0,0,225
+
+∗ identificador: pl
+∗ coordenadas x, y, z de um ponto no plano: 0.0,0.0,-10.0
+∗ Vetor normal 3D normalizado, no intervalo [-1,1] para cada eixo x, y, z:
+
+0.0,1.0,0.0
+∗ cores R,G,B no intervalo [0-255]: 0,0,225
+
+◦ Cilindro:
+cy 50.0,0.0,20.6 0.0,0.0,1.0 14.2 21.42 10,0,255
+
+∗ identificador: cy
+∗ coordenadas x, y, z do centro do cilindro: 50.0,0.0,20.6
+∗ Vetor 3D normalizado do eixo do cilindro, no intervalo [-1,1] para cada
+
+eixo x, y, z: 0.0,0.0,1.0
+∗ o diâmetro do cilindro: 14.2
+∗ a altura do cilindro: 21.42
+∗ cores R, G, B no intervalo [0,255]: 10, 0, 255
+
+11
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+• Exemplo da parte obrigatória com uma cena .rt minimalista:
+
+A 0.2 255,255,255
+
+C -50,0,20 0,0,1 70
+L -40,0,30 0.7 255,255,255
+
+pl 0,0,0 0,1.0,0 255,0,225
+sp 0,0,20 20 255,0,0
+cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
+
+• Se qualquer má configuração de qualquer tipo for encontrada no arquivo, o programa
+deve sair corretamente e retornar "Error\n"seguido por uma mensagem de erro
+explícita de sua escolha.
+
+• Para a defesa, seria ideal para você ter um conjunto completo de cenas focadas no
+que é funcional, para facilitar o controle de os elementos a serem criados.
+
+12
+
+
+
+Capítulo V
+Requisitos do Readme
+
+Um arquivo README.md deve ser fornecido na raiz do seu repositório Git. Seu ob-
+jetivo é permitir que qualquer pessoa não familiarizada com o projeto (colegas, equipe,
+recrutadores, etc.) compreenda rapidamente o que o projeto é, como executá-lo e onde
+encontrar mais informações sobre o tópico.
+O README.md deve incluir pelo menos:
+
+• A primeira linha deve ser italicizada e dizer: Este projeto foi criado como parte do
+currículo da 42 por <login1>[, <login2>[, <login3>[...]]].
+
+• Uma seção “Descrição” que apresente claramente o projeto, incluindo seu objetivo
+e uma breve visão geral.
+
+• Uma seção “Instruções” contendo informações relevantes sobre compilação, insta-
+lação e/ou execução.
+
+• Uma seção “Recursos” listando referências clássicas relacionadas ao tópico (docu-
+mentação, artigos, tutoriais, etc.), bem como uma descrição de como a IA foi usada
+— especificando para quais tarefas e quais partes do projeto.
+
+➠ Seções adicionais podem ser necessárias dependendo do projeto (e.g.,
+exemplos de uso, lista de recursos, escolhas técnicas, etc.).
+
+Quaisquer adições necessárias serão explicitamente listadas abaixo.
+
+O inglês é recomendado; alternativamente, você pode usar o idioma
+principal do seu campus.
+
+13
+
+
+
+Capítulo VI
+Parte bônus
+
+A técnica de Ray-Tracing pode lidar com muito mais coisas como reflexão, transpa-
+rência, refração, objetos mais complexos, sombras suaves, cáusticas, iluminação global,
+bump mapping, renderização de arquivos .obj, etc.
+
+Mas para o projeto miniRT, queremos manter as coisas simples para o seu primeiro ray
+tracer e seus primeiros passos em CGI.
+
+Aqui está uma lista de alguns bônus simples que você pode implementar. Se você
+quiser fazer bônus maiores, aconselhamos fortemente que você recodifique um novo ray
+tracer mais tarde em sua vida de desenvolvedor depois que este pequeno estiver termi-
+nado e totalmente funcional.
+
+Figura VI.1: Um spot, um skybox espacial e uma esfera texturizada da terra brilhante
+com bump-mapping
+
+14
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Bônus serão avaliados apenas se sua parte obrigatória for perfeita.
+Por perfeita, naturalmente, queremos dizer que precisa estar
+completa, que não pode falhar, mesmo em casos de erros desagradáveis,
+como usos incorretos, etc. Significa que se sua parte obrigatória
+não obtiver todos os pontos durante a avaliação, seus bônus serão
+totalmente ignorados.
+
+Lista de bônus:
+
+• Adicione reflexão especular para obter um modelo de reflexão de Phong completo.
+
+• Disrupção de cor: padrão de tabuleiro de xadrez.
+
+• Luzes coloridas e multi-spot.
+
+• Um outro objeto de segundo grau: cone, hiperboloide, paraboloide..
+
+• Lidar com texturas de mapa de relevo.
+
+Você pode usar outras funções e adicionar recursos à sua descrição de
+cena para completar a parte bônus, desde que seu uso seja justificado
+durante sua avaliação. Você também pode modificar o arquivo de cena
+esperado para atender às suas necessidades. Seja esperto!
+
+15
+
+
+
+Capítulo VII
+Exemplos
+
+Figura VII.1: Uma esfera, um spot, algum brilho (opcional).
+
+16
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Figura VII.2: Um cilindro, um spot.
+
+Figura VII.3: Um cone (opcional), um plano, um spot.
+
+17
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Figura VII.4: Um pouco de tudo, incluindo 2 planos.
+
+Figura VII.5: Mesma cena, câmera diferente.
+
+18
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Figura VII.6: Desta vez com sombras.
+
+Figura VII.7: Com vários spots.
+
+19
+
+
+
+miniRT Meu primeiro RayTracer com a MiniLibX
+
+Figura VII.8: E, finalmente, com vários spots e uma esfera quadriculada (opcional) bri-
+lhante no meio.
+
+20
+
+
+
+Capítulo VIII
+Entrega e avaliação por pares
+
+Envie sua tarefa em seu repositório Git como de costume. Apenas o trabalho dentro do
+seu repositório será avaliado durante a defesa. Não hesite em verificar os nomes dos seus
+arquivos para garantir que estejam corretos.
+
+Durante a avaliação, uma breve modificação do projeto pode ser ocasionalmente soli-
+citada. Isso pode envolver uma pequena mudança de comportamento, algumas linhas de
+código para escrever ou reescrever, ou um recurso fácil de adicionar.
+
+Embora esta etapa possa não ser aplicável a todos os projetos, você deve estar pre-
+parado para ela se for mencionada nas diretrizes de avaliação.
+
+Esta etapa visa verificar sua compreensão real de uma parte específica do projeto. A mo-
+dificação pode ser realizada em qualquer ambiente de desenvolvimento que você escolher
+(por exemplo, sua configuração usual), e deve ser viável em poucos minutos — a menos
+que um prazo específico seja definido como parte da avaliação.
+Você pode, por exemplo, ser solicitado a fazer uma pequena atualização em uma função
+ou script, modificar uma exibição ou ajustar uma estrutura de dados para armazenar
+novas informações, etc.
+
+Os detalhes (escopo, alvo, etc.) serão especificados nas diretrizes de avaliação e podem
+variar de uma avaliação para outra para o mesmo projeto.
+
+???????????? XXXXXXXXXX = $3$$f2c51fc265cf7e70865cb1bd24214beb
+
+21

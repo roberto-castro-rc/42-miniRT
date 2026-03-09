@@ -38,6 +38,44 @@ SRCS		= src/core/main.c \
 
 OBJS		= $(patsubst %.c,$(OBJ_DIR)/%.o,$(SRCS))
 
+# Bonus source files
+BONUS_SRCS	= src/core/main_bonus.c \
+		  src/core/cleanup_bonus.c \
+		  src/core/error_bonus.c \
+		  src/scene/init_scene_bonus.c \
+		  src/scene/camera_bonus.c \
+		  src/parser/parse_scene_bonus.c \
+		  src/parser/parse_elements_bonus.c \
+		  src/parser/parse_objects_bonus.c \
+		  src/parser/parse_sphere_bonus.c \
+		  src/parser/parse_utils_bonus.c \
+		  src/parser/ft_atod_bonus.c \
+		  src/parser/validate_bonus.c \
+		  src/parser/parse_cone_bonus.c \
+		  src/math/vec_basic_bonus.c \
+		  src/math/vec_products_bonus.c \
+		  src/math/vec_utils_bonus.c \
+		  src/math/vec_reflect_bonus.c \
+		  src/render/render_bonus.c \
+		  src/render/ray_trace_bonus.c \
+		  src/render/lighting_bonus.c \
+		  src/render/shadows_bonus.c \
+		  src/render/specular_bonus.c \
+		  src/render/checkerboard_bonus.c \
+		  src/render/bumpmap_bonus.c \
+		  src/shapes/intersect_sphere_bonus.c \
+		  src/shapes/intersect_plane_bonus.c \
+		  src/shapes/intersect_cylinder_bonus.c \
+		  src/shapes/cylinder_utils_bonus.c \
+		  src/shapes/intersect_cone_bonus.c \
+		  src/shapes/cone_utils_bonus.c \
+		  src/utils/color_bonus.c \
+		  src/mlx/mlx_init_bonus.c \
+		  src/mlx/mlx_events_bonus.c \
+		  src/mlx/mlx_utils_bonus.c
+
+BONUS_OBJS	= $(patsubst %.c,$(OBJ_DIR)/%.o,$(BONUS_SRCS))
+
 # Colors
 GREEN		= \033[0;32m
 RED			= \033[0;31m
@@ -77,6 +115,12 @@ fclean: clean
 	@rm -rf lib/MLX42/build
 
 re: fclean all
+
+# Bonus build
+bonus: libmlx libft $(BONUS_OBJS)
+	@echo "$(GREEN)Linking $(NAME) (bonus)...$(RESET)"
+	@$(CC) $(BONUS_OBJS) $(LDFLAGS) -o $(NAME)
+	@echo "$(GREEN)$(NAME) bonus created successfully!$(RESET)"
 
 # =============================================================================
 # Test rules
@@ -167,4 +211,48 @@ demo3: $(NAME)
 norm:
 	@norminette src/ includes/ lib/libft/
 
-.PHONY: all clean fclean re libmlx libft norm test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3
+# =============================================================================
+# Bonus test rules
+# =============================================================================
+
+test-bonus-step1: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step1
+
+test-bonus-step2: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step2
+
+test-bonus-step3: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step3
+
+test-bonus-step4: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step4
+
+test-bonus-step5: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh step5
+
+test-bonus-all: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh all
+
+test-bonus-compare:
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh compare
+
+test-bonus-progress: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh progress
+
+test-bonus-leak: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh leak
+
+test-bonus-menu: bonus
+	@chmod +x tests/test_bonus.sh
+	@./tests/test_bonus.sh
+
+.PHONY: all clean fclean re bonus libmlx libft norm test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3 test-bonus-step1 test-bonus-step2 test-bonus-step3 test-bonus-step4 test-bonus-step5 test-bonus-all test-bonus-compare test-bonus-progress test-bonus-leak test-bonus-menu

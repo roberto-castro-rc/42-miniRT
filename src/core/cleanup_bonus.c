@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup.c                                          :+:      :+:    :+:   */
+/*   cleanup_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:08:27 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/09 18:01:08 by rpaulo-c         ###   ########.fr       */
+/*   Created: 2026/03/09 17:33:02 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 17:33:02 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "minirt_bonus.h"
 
 void	cleanup_scene(t_scene *scene)
 {
@@ -20,6 +20,8 @@ void	cleanup_scene(t_scene *scene)
 		free(scene->planes);
 	if (scene->cylinders)
 		free(scene->cylinders);
+	if (scene->cones)
+		free(scene->cones);
 	if (scene->lights)
 		free(scene->lights);
 	if (scene->image)
