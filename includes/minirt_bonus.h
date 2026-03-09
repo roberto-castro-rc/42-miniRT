@@ -26,6 +26,8 @@
 # define EPSILON 1e-6
 # define SHININESS 32
 # define CHECKER_SCALE 10.0
+# define BUMP_SCALE 8.0
+# define BUMP_INTENSITY 0.3
 # define HIT_SPHERE 0
 # define HIT_PLANE 1
 # define HIT_CYLINDER 2
@@ -154,6 +156,7 @@ int			validate_normalized(t_vector vec);
 int			validate_range_double(double val, double min, double max);
 int			validate_range_int(int val, int min, int max);
 int			validate_int_str(char *str);
+int			get_material(char *str);
 
 /* Initialization and cleanup */
 void		init_scene(t_scene *scene);
@@ -186,6 +189,9 @@ t_hit		check_cone_cap(t_ray ray, t_cone cn, t_vector cap, double cl);
 
 /* Checkerboard */
 void		apply_checkerboard(t_hit *hit);
+
+/* Bump mapping */
+void		apply_bump(t_hit *hit);
 
 /* Lighting functions */
 t_color		calculate_lighting(t_scene *scene, t_hit hit, t_ray ray);

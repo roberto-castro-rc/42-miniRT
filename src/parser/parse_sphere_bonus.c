@@ -25,7 +25,7 @@ int	parse_sphere(char *line, t_scene *scene)
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3])
 		return (free_split(parts), error_exit("Sphere: invalid format"), 0);
-	if (parts[4] && (ft_strncmp(parts[4], "checker", 8) || parts[5]))
+	if (get_material(parts[4]) < 0 || (parts[4] && parts[5]))
 		return (free_split(parts), error_exit("Sphere: invalid format"), 0);
 	if (!parse_vector(parts[1], &sp.center)
 		|| !parse_color(parts[3], &sp.color))
@@ -35,7 +35,7 @@ int	parse_sphere(char *line, t_scene *scene)
 		return (free_split(parts),
 			error_exit("Sphere diameter must be > 0"), 0);
 	sp.radius = sp.diameter / 2.0;
-	sp.material = (parts[4] != NULL);
+	sp.material = get_material(parts[4]);
 	free_split(parts);
 	return (add_sphere(scene, sp));
 }

@@ -21,7 +21,7 @@ static int	validate_cone_parts(char **parts)
 	if (!parts || !parts[1] || !parts[2]
 		|| !parts[3] || !parts[4] || !parts[5])
 		return (0);
-	if (parts[6] && ft_strncmp(parts[6], "checker", 8))
+	if (get_material(parts[6]) < 0)
 		return (0);
 	if (parts[6] && parts[7])
 		return (0);
@@ -59,7 +59,7 @@ int	parse_cone(char *line, t_scene *scene)
 		return (free_split(parts),
 			error_exit("Cone: angle (0-90) and height > 0"), 0);
 	cn.half_angle = cn.half_angle * M_PI / 180.0;
-	cn.material = (parts[6] != NULL);
+	cn.material = get_material(parts[6]);
 	free_split(parts);
 	return (add_cone(scene, cn));
 }

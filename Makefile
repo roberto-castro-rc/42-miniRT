@@ -61,6 +61,7 @@ BONUS_SRCS	= src/core/main_bonus.c \
 		  src/render/shadows_bonus.c \
 		  src/render/specular_bonus.c \
 		  src/render/checkerboard_bonus.c \
+		  src/render/bumpmap_bonus.c \
 		  src/shapes/intersect_sphere_bonus.c \
 		  src/shapes/intersect_plane_bonus.c \
 		  src/shapes/intersect_cylinder_bonus.c \

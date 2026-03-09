@@ -23,7 +23,7 @@ int	parse_plane(char *line, t_scene *scene)
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3])
 		return (free_split(parts), error_exit("Plane: invalid format"), 0);
-	if (parts[4] && (ft_strncmp(parts[4], "checker", 8) || parts[5]))
+	if (get_material(parts[4]) < 0 || (parts[4] && parts[5]))
 		return (free_split(parts), error_exit("Plane: invalid format"), 0);
 	if (!parse_vector(parts[1], &pl.point)
 		|| !parse_vector(parts[2], &pl.normal)
@@ -33,7 +33,7 @@ int	parse_plane(char *line, t_scene *scene)
 		return (free_split(parts),
 			error_exit("Plane: normal not normalized"), 0);
 	pl.normal = vec_normalize(pl.normal);
-	pl.material = (parts[4] != NULL);
+	pl.material = get_material(parts[4]);
 	free_split(parts);
 	return (add_plane(scene, pl));
 }
@@ -70,7 +70,7 @@ static int	fill_cylinder(char **parts, t_cylinder *cy)
 	if (error || cy->diameter <= 0 || cy->height <= 0)
 		return (error_exit("Cylinder dimensions must be > 0"), 0);
 	cy->radius = cy->diameter / 2.0;
-	cy->material = (parts[6] != NULL);
+	cy->material = get_material(parts[6]);
 	return (1);
 }
 
@@ -84,8 +84,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 		|| !parts[4] || !parts[5])
 		return (free_split(parts),
 			error_exit("Cylinder: invalid format"), 0);
-	if (parts[6] && (ft_strncmp(parts[6], "checker", 8)
-			|| parts[7]))
+	if (get_material(parts[6]) < 0 || (parts[6] && parts[7]))
 		return (free_split(parts),
 			error_exit("Cylinder: invalid format"), 0);
 	if (!fill_cylinder(parts, &cy))

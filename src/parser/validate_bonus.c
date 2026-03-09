@@ -40,3 +40,14 @@ int	validate_int_str(char *str)
 	}
 	return (1);
 }
+
+int	get_material(char *str)
+{
+	if (!str)
+		return (0);
+	if (!ft_strncmp(str, "checker", 8))
+		return (1);
+	if (!ft_strncmp(str, "bump", 5))
+		return (2);
+	return (-1);
+}

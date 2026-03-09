@@ -77,6 +77,8 @@ t_color	trace_ray(t_scene *scene, int x, int y)
 		return ((t_color){0, 0, 0});
 	if (hit.material == 1)
 		apply_checkerboard(&hit);
+	else if (hit.material == 2)
+		apply_bump(&hit);
 	color = calculate_lighting(scene, hit, ray);
 	return (color);
 }
