@@ -57,14 +57,22 @@ int	parse_light(char *line, t_scene *scene)
 	int			error;
 
 	parts = ft_split(line, ' ');
-	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
+	if (!parts || !parts[1] || !parts[2])
 		return (free_split(parts), error_exit("Light: invalid format"), 0);
-	if (!parse_vector(parts[1], &light.position)
-		|| !parse_color(parts[3], &light.color))
-		return (free_split(parts), error_exit("Light: invalid data"), 0);
+	if (parts[3] && parts[4])
+		return (free_split(parts), error_exit("Light: too many fields"), 0);
+	if (!parse_vector(parts[1], &light.position))
+		return (free_split(parts), error_exit("Light: invalid position"), 0);
 	light.brightness = parse_double(parts[2], &error);
 	if (error || !validate_range_double(light.brightness, 0.0, 1.0))
 		return (free_split(parts), error_exit("Light brightness [0, 1]"), 0);
+	if (parts[3])
+	{
+		if (!parse_color(parts[3], &light.color))
+			return (free_split(parts), error_exit("Light: invalid color"), 0);
+	}
+	else
+		light.color = (t_color){255, 255, 255};
 	new_lights = malloc(sizeof(t_light) * (scene->light_count + 1));
 	if (!new_lights)
 		return (free_split(parts), error_exit("Memory allocation failed"), 0);
