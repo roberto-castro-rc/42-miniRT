@@ -1,0 +1,8 @@
+# Bonus 5: Bump plano - chao com textura ondulada/tijolo
+A 0.15 255,255,255
+C 0,5,-10 0,-0.2,1 65
+
+L 0,10,-3 0.8 255,255,255
+
+sp 0,1,5 2 200,60,60
+pl 0,-1,0 0,1,0 180,160,140 bump

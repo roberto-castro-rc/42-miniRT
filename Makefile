@@ -123,55 +123,10 @@ bonus: libmlx libft $(BONUS_OBJS)
 	@echo "$(GREEN)$(NAME) bonus created successfully!$(RESET)"
 
 # =============================================================================
-# Test rules
+# Utility rules
 # =============================================================================
 
-# Run all tests
-test: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh all
-
-# Run Level 1 tests (basic)
-test1: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh level1
-
-# Run Level 2 tests (intermediate)
-test2: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh level2
-
-# Run Level 3 tests (advanced)
-test3: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh level3
-
-# Run error handling tests
-test-error: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh error
-
-# Run bonus tests (multiple lights)
-test-bonus: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh bonus
-
-# Run edge case tests
-test-edge: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh edge
-
-# Interactive test menu
-test-menu: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh
-
-# Quick visual test
-test-visual: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh visual
-
-# Run specific test file
+# Run specific scene
 run: $(NAME)
 	@if [ -z "$(SCENE)" ]; then \
 		echo "$(RED)Usage: make run SCENE=path/to/scene.rt$(RESET)"; \
@@ -179,80 +134,17 @@ run: $(NAME)
 		./$(NAME) $(SCENE); \
 	fi
 
-# Run leak tests with valgrind (all error paths + valid scenes)
-test-leak: $(NAME)
-	@chmod +x tests/run_tests.sh
-	@./tests/run_tests.sh leak
-
 # Run valgrind on a specific scene
 valgrind: $(NAME)
 	@if [ -z "$(SCENE)" ]; then \
 		echo "$(RED)Usage: make valgrind SCENE=path/to/scene.rt$(RESET)"; \
-		echo "  Or use: make test-leak  (runs all leak tests)"; \
 	else \
 		valgrind --leak-check=full --show-leak-kinds=definite,indirect,possible --track-origins=yes \
 		--track-fds=no --suppressions=mlx.supp ./$(NAME) $(SCENE); \
 		echo "$(GREEN)Note: small leaks from GPU/system drivers (???) are not from miniRT$(RESET)"; \
 	fi
 
-# Quick test scenes
-demo: $(NAME)
-	@echo "$(GREEN)Running demo scenes...$(RESET)"
-	@./$(NAME) tests/level1_basic/01_single_sphere.rt
-
-demo2: $(NAME)
-	@echo "$(GREEN)Running intermediate demo...$(RESET)"
-	@./$(NAME) tests/level2_intermediate/03_mixed_objects.rt
-
-demo3: $(NAME)
-	@echo "$(GREEN)Running advanced demo...$(RESET)"
-	@./$(NAME) tests/level3_advanced/02_snowman.rt
-
 norm:
 	@norminette src/ includes/ lib/libft/
 
-# =============================================================================
-# Bonus test rules
-# =============================================================================
-
-test-bonus-step1: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh step1
-
-test-bonus-step2: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh step2
-
-test-bonus-step3: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh step3
-
-test-bonus-step4: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh step4
-
-test-bonus-step5: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh step5
-
-test-bonus-all: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh all
-
-test-bonus-compare:
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh compare
-
-test-bonus-progress: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh progress
-
-test-bonus-leak: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh leak
-
-test-bonus-menu: bonus
-	@chmod +x tests/test_bonus.sh
-	@./tests/test_bonus.sh
-
-.PHONY: all clean fclean re bonus libmlx libft norm test test1 test2 test3 test-error test-bonus test-edge test-menu test-visual test-leak run valgrind demo demo2 demo3 test-bonus-step1 test-bonus-step2 test-bonus-step3 test-bonus-step4 test-bonus-step5 test-bonus-all test-bonus-compare test-bonus-progress test-bonus-leak test-bonus-menu
+.PHONY: all clean fclean re bonus libmlx libft norm run valgrind

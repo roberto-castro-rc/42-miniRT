@@ -1,0 +1,8 @@
+# Bonus 4: Checkerboard esfera - esfera com xadrez vermelho e preto
+A 0.15 255,255,255
+C 0,2,-10 0,0,1 60
+
+L -3,8,-4 0.8 255,255,255
+
+sp 0,1,5 3.5 200,50,50 checker
+pl 0,-2,0 0,1,0 180,180,180

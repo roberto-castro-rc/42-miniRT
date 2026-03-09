@@ -1,0 +1,9 @@
+# Bonus 2: Specular cilindro - highlight especular no corpo do cilindro
+A 0.15 255,255,255
+C 0,3,-10 0,0,1 60
+
+L 2,8,-4 0.8 255,255,255
+
+cy 0,-2,5 0,1,0 2 5 180,60,60
+sp -3,0,6 1.5 60,60,200
+pl 0,-2,0 0,1,0 180,180,180

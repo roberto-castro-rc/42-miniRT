@@ -1,0 +1,10 @@
+# Bonus 1: Multi-light RGB - tres luzes coloridas iluminam esfera branca
+A 0.1 255,255,255
+C 0,2,-10 0,0,1 70
+
+L -6,6,-3 0.6 255,50,50
+L 6,6,-3 0.6 50,50,255
+L 0,8,2 0.6 50,255,50
+
+sp 0,1,5 4 220,220,220
+pl 0,-1,0 0,1,0 180,180,180
