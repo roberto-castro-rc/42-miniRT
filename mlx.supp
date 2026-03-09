@@ -202,3 +202,186 @@
    ...
    fun:mlx_terminate
 }
+
+# ---------- GTK3 / Pango / Fontconfig ----------
+{
+   fontconfig_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libfontconfig.so*
+}
+{
+   pango_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libpango-1.0.so*
+}
+{
+   pango_ft2_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libpangoft2-1.0.so*
+}
+{
+   pango_cairo_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libpangocairo-1.0.so*
+}
+{
+   gtk3_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libgtk-3.so*
+}
+{
+   gdk3_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libgdk-3.so*
+}
+{
+   glib_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libglib-2.0.so*
+}
+{
+   gio_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libgio-2.0.so*
+}
+{
+   gobject_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libgobject-2.0.so*
+}
+{
+   rsvg_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/librsvg-2.so*
+}
+{
+   gdk_pixbuf_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libgdk_pixbuf-2.0.so*
+}
+{
+   expat_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libexpat.so*
+}
+{
+   xml2_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libxml2.so*
+}
+{
+   pixbuf_loader_svg
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libpixbufloader_svg.so
+}
+{
+   dconf_settings
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libdconfsettings.so
+}
+{
+   pthread_dtv_leak
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create*
+}
+
+# ---------- Wayland / libdecor ----------
+{
+   libdecor_gtk_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libdecor-gtk.so
+}
+{
+   libdecor_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libdecor-0.so*
+}
+{
+   wayland_client_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libwayland-client.so*
+}
+{
+   wayland_cursor_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libwayland-cursor.so*
+}
+
+# ---------- DBus / Accessibility ----------
+{
+   dbus_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libdbus-1.so*
+}
+{
+   atk_bridge_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libatk-bridge-2.0.so*
+}
+{
+   atspi_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libatspi.so*
+}
+
+# ---------- libffi ----------
+{
+   libffi_leak
+   Memcheck:Leak
+   match-leak-kinds: reachable,definite,indirect,possible
+   ...
+   obj:*/libffi.so*
+}
+
+# ---------- GPU driver (unmapped addresses) ----------
+# NOTE: GPU/Mesa driver leaks showing only ??? frames cannot be
+# suppressed via .supp files. They are harmless system leaks.
