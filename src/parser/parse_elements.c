@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_elements.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:09:03 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/07 17:09:04 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2026/03/09 17:19:45 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	parse_camera(char **parts, t_scene *scene)
 	scene->camera.orientation = vec_normalize(scene->camera.orientation);
 	fov = parse_double(parts[3], &error);
 	if (error || fov <= 0.0 || fov >= 180.0)
-		return (error_exit("Camera FOV must be in range (0, 180)"), 0);
+		return (error_exit("Camera FOV must be in range (0.1, 179.9)"), 0);
 	scene->camera.fov = fov;
 	return (1);
 }

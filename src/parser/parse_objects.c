@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
-/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/07 17:09:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/09 10:56:34 by microbiana       ###   ########.fr       */
-=======
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:09:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/07 22:36:50 by rpaulo-c         ###   ########.fr       */
->>>>>>> pre-eval
+/*   Updated: 2026/03/09 17:26:57 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +67,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 	char		**parts;
 	t_cylinder	cy;
 	int			error;
-	int			error2;   // ← adicionar esta linha
+	int			error2;
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3]
@@ -89,16 +82,8 @@ int	parse_cylinder(char *line, t_scene *scene)
 			error_exit("Cylinder: axis not normalized"), 0);
 	cy.axis = vec_normalize(cy.axis);
 	cy.diameter = parse_double(parts[3], &error);
-<<<<<<< HEAD
 	cy.height = parse_double(parts[4], &error2);  // ← &error2 aqui
 	if (error || error2 || cy.diameter <= 0 || cy.height <= 0)  // ← checar ambos
-=======
-	if (error || cy.diameter <= 0 || cy.height <= 0)
-		return (free_split(parts),
-			error_exit("Cylinder dimensions must be > 0"), 0);
-	cy.height = parse_double(parts[4], &error);
-	if (error || cy.diameter <= 0 || cy.height <= 0)
->>>>>>> pre-eval
 		return (free_split(parts),
 			error_exit("Cylinder dimensions must be > 0"), 0);
 	cy.radius = cy.diameter / 2.0;
