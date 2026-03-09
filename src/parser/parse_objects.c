@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_objects.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpaula-n <lpaula-n@student.42.fr>          +#+  +:+       +#+        */
+/*   By: microbiana <microbiana@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 17:09:07 by lpaula-n          #+#    #+#             */
-/*   Updated: 2026/03/07 17:11:05 by lpaula-n         ###   ########.fr       */
+/*   Updated: 2026/03/09 10:56:34 by microbiana       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	parse_cylinder(char *line, t_scene *scene)
 	char		**parts;
 	t_cylinder	cy;
 	int			error;
+	int			error2;   // ← adicionar esta linha
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3]
@@ -81,8 +82,8 @@ int	parse_cylinder(char *line, t_scene *scene)
 			error_exit("Cylinder: axis not normalized"), 0);
 	cy.axis = vec_normalize(cy.axis);
 	cy.diameter = parse_double(parts[3], &error);
-	cy.height = parse_double(parts[4], &error);
-	if (error || cy.diameter <= 0 || cy.height <= 0)
+	cy.height = parse_double(parts[4], &error2);  // ← &error2 aqui
+	if (error || error2 || cy.diameter <= 0 || cy.height <= 0)  // ← checar ambos
 		return (free_split(parts),
 			error_exit("Cylinder dimensions must be > 0"), 0);
 	cy.radius = cy.diameter / 2.0;
