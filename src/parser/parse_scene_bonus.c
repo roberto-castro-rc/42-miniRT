@@ -1,4 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_scene_bonus.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/09 18:05:38 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:29:03 by rpaulo-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt_bonus.h"
+
+static int	parse_elem(char *id, char *line, t_scene *scene)
+{
+	if (ft_strncmp(id, "L", 2) == 0)
+		return (parse_light(line, scene));
+	if (ft_strncmp(id, "sp", 3) == 0)
+		return (parse_sphere(line, scene));
+	if (ft_strncmp(id, "pl", 3) == 0)
+		return (parse_plane(line, scene));
+	if (ft_strncmp(id, "cy", 3) == 0)
+		return (parse_cylinder(line, scene));
+	if (ft_strncmp(id, "cn", 3) == 0)
+		return (parse_cone(line, scene));
+	if (id[0] != '\n' && id[0] != '\0')
+		return (error_exit("Unknown element type"), 0);
+	return (1);
+}
 
 static int	parse_line(char *line, t_scene *scene, int *flags)
 {
@@ -8,23 +37,20 @@ static int	parse_line(char *line, t_scene *scene, int *flags)
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[0])
 		return (free_split(parts), 1);
-	result = 1;
 	if (ft_strncmp(parts[0], "A", 2) == 0 && !(*flags & 1))
-		result = parse_ambient(parts, scene) && (*flags |= 1);
+	{
+		result = parse_ambient(parts, scene);
+		if (result)
+			*flags |= 1;
+	}
 	else if (ft_strncmp(parts[0], "C", 2) == 0 && !(*flags & 2))
-		result = parse_camera(parts, scene) && (*flags |= 2);
-	else if (ft_strncmp(parts[0], "L", 2) == 0)
-		result = parse_light(line, scene);
-	else if (ft_strncmp(parts[0], "sp", 3) == 0)
-		result = parse_sphere(line, scene);
-	else if (ft_strncmp(parts[0], "pl", 3) == 0)
-		result = parse_plane(line, scene);
-	else if (ft_strncmp(parts[0], "cy", 3) == 0)
-		result = parse_cylinder(line, scene);
-	else if (ft_strncmp(parts[0], "cn", 3) == 0)
-		result = parse_cone(line, scene);
-	else if (parts[0][0] != '\n' && parts[0][0] != '\0')
-		return (free_split(parts), error_exit("Unknown element type"), 0);
+	{
+		result = parse_camera(parts, scene);
+		if (result)
+			*flags |= 2;
+	}
+	else
+		result = parse_elem(parts[0], line, scene);
 	free_split(parts);
 	return (result);
 }

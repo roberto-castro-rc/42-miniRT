@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   specular_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/09 18:10:08 by rpaulo-c          #+#    #+#             */
+/*   Updated: 2026/03/09 18:10:09 by rpaulo-c         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt_bonus.h"
 
 t_color	calc_specular(t_hit hit, t_light light,
 		t_vector view, t_vector ldir)
 {
 	t_vector	reflect_dir;
-	double	spec;
-	t_color	result;
+	double		spec;
+	t_color		result;
 
 	reflect_dir = vec_reflect(vec_negate(ldir), hit.normal);
 	spec = fmax(0.0, vec_dot(reflect_dir, view));
