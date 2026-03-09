@@ -6,7 +6,7 @@
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/07 00:00:00 by rpaulo-c          #+#    #+#             */
-/*   Updated: 2026/03/09 18:08:50 by rpaulo-c         ###   ########.fr       */
+/*   Updated: 2026/03/09 19:33:09 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int			get_material(char *str);
 
 /* Initialization and cleanup */
 void		init_scene(t_scene *scene);
-void		init_mlx(t_scene *scene);
+void		init_mlx(t_scene *scene, char *file);
 void		init_camera(t_camera *cam);
 void		cleanup_scene(t_scene *scene);
 

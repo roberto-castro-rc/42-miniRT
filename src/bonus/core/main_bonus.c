@@ -6,7 +6,7 @@
 /*   By: rpaulo-c <rpaulo-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/09 17:33:17 by rpaulo-c          #+#    #+#             */
-/*   Updated: 2026/03/09 18:10:29 by rpaulo-c         ###   ########.fr       */
+/*   Updated: 2026/03/09 19:33:09 by rpaulo-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv)
 		cleanup_scene(&scene);
 		return (1);
 	}
-	init_mlx(&scene);
+	init_mlx(&scene, argv[1]);
 	init_camera(&scene.camera);
 	render_scene(&scene);
 	mlx_loop(scene.mlx);
