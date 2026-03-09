@@ -26,6 +26,10 @@
 # define EPSILON 1e-6
 # define SHININESS 32
 # define CHECKER_SCALE 10.0
+# define HIT_SPHERE 0
+# define HIT_PLANE 1
+# define HIT_CYLINDER 2
+# define HIT_CONE 3
 
 typedef struct s_color
 {
@@ -105,6 +109,9 @@ typedef struct s_hit
 	t_vector	normal;
 	t_color		color;
 	int			material;
+	int			type;
+	t_vector	obj_center;
+	t_vector	obj_axis;
 }	t_hit;
 
 typedef struct s_scene
@@ -176,6 +183,9 @@ t_hit		check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl);
 t_hit		create_cone_body_hit(t_ray ray, t_cone cn, double t);
 int			check_cone_body(t_ray ray, t_cone cn, double t, double cl);
 t_hit		check_cone_cap(t_ray ray, t_cone cn, t_vector cap, double cl);
+
+/* Checkerboard */
+void		apply_checkerboard(t_hit *hit);
 
 /* Lighting functions */
 t_color		calculate_lighting(t_scene *scene, t_hit hit, t_ray ray);

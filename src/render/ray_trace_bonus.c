@@ -43,13 +43,6 @@ static void	check_cylinders(t_scene *scene, t_ray ray, t_hit *closest)
 			*closest = hit;
 		i++;
 	}
-}
-
-static void	check_cones(t_scene *scene, t_ray ray, t_hit *closest)
-{
-	int		i;
-	t_hit	hit;
-
 	i = 0;
 	while (i < scene->cone_count)
 	{
@@ -69,7 +62,6 @@ t_hit	find_closest_hit(t_scene *scene, t_ray ray)
 	check_spheres(scene, ray, &closest);
 	check_planes(scene, ray, &closest);
 	check_cylinders(scene, ray, &closest);
-	check_cones(scene, ray, &closest);
 	return (closest);
 }
 
@@ -83,6 +75,8 @@ t_color	trace_ray(t_scene *scene, int x, int y)
 	hit = find_closest_hit(scene, ray);
 	if (!hit.hit)
 		return ((t_color){0, 0, 0});
+	if (hit.material == 1)
+		apply_checkerboard(&hit);
 	color = calculate_lighting(scene, hit, ray);
 	return (color);
 }

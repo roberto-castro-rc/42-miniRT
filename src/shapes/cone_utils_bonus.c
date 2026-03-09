@@ -22,6 +22,9 @@ t_hit	create_cone_body_hit(t_ray ray, t_cone cn, double t)
 		hit.normal = vec_negate(hit.normal);
 	hit.color = cn.color;
 	hit.material = cn.material;
+	hit.type = HIT_CONE;
+	hit.obj_center = cn.center;
+	hit.obj_axis = cn.axis;
 	return (hit);
 }
 
@@ -61,5 +64,8 @@ t_hit	check_cone_cap(t_ray ray, t_cone cn, t_vector cap, double cl)
 		hit.normal = vec_negate(hit.normal);
 	hit.color = cn.color;
 	hit.material = cn.material;
+	hit.type = HIT_CONE;
+	hit.obj_center = cn.center;
+	hit.obj_axis = cn.axis;
 	return (hit);
 }

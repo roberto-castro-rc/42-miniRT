@@ -40,5 +40,6 @@ t_hit	intersect_sphere(t_ray ray, t_sphere sp, double closest)
 	hit.normal = vec_normalize(vec_subtract(hit.point, sp.center));
 	hit.color = sp.color;
 	hit.material = sp.material;
+	hit.type = HIT_SPHERE;
 	return (hit);
 }

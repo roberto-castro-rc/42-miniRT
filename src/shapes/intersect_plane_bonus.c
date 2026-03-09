@@ -22,5 +22,6 @@ t_hit	intersect_plane(t_ray ray, t_plane pl, double closest)
 		hit.normal = vec_negate(hit.normal);
 	hit.color = pl.color;
 	hit.material = pl.material;
+	hit.type = HIT_PLANE;
 	return (hit);
 }

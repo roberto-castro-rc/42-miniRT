@@ -21,16 +21,19 @@ int	parse_plane(char *line, t_scene *scene)
 	t_plane	pl;
 
 	parts = ft_split(line, ' ');
-	if (!parts || !parts[1] || !parts[2] || !parts[3] || parts[4])
+	if (!parts || !parts[1] || !parts[2] || !parts[3])
+		return (free_split(parts), error_exit("Plane: invalid format"), 0);
+	if (parts[4] && (ft_strncmp(parts[4], "checker", 8) || parts[5]))
 		return (free_split(parts), error_exit("Plane: invalid format"), 0);
 	if (!parse_vector(parts[1], &pl.point)
 		|| !parse_vector(parts[2], &pl.normal)
 		|| !parse_color(parts[3], &pl.color))
 		return (free_split(parts), error_exit("Plane: invalid data"), 0);
 	if (!validate_normalized(pl.normal))
-		return (free_split(parts), error_exit("Plane: normal not normalized"), 0);
+		return (free_split(parts),
+			error_exit("Plane: normal not normalized"), 0);
 	pl.normal = vec_normalize(pl.normal);
-	pl.material = 0;
+	pl.material = (parts[4] != NULL);
 	free_split(parts);
 	return (add_plane(scene, pl));
 }
@@ -51,31 +54,42 @@ static int	add_cylinder(t_scene *scene, t_cylinder cy)
 	return (1);
 }
 
+static int	fill_cylinder(char **parts, t_cylinder *cy)
+{
+	int	error;
+
+	if (!parse_vector(parts[1], &cy->center)
+		|| !parse_vector(parts[2], &cy->axis)
+		|| !parse_color(parts[5], &cy->color))
+		return (error_exit("Cylinder: invalid data"), 0);
+	if (!validate_normalized(cy->axis))
+		return (error_exit("Cylinder: axis not normalized"), 0);
+	cy->axis = vec_normalize(cy->axis);
+	cy->diameter = parse_double(parts[3], &error);
+	cy->height = parse_double(parts[4], &error);
+	if (error || cy->diameter <= 0 || cy->height <= 0)
+		return (error_exit("Cylinder dimensions must be > 0"), 0);
+	cy->radius = cy->diameter / 2.0;
+	cy->material = (parts[6] != NULL);
+	return (1);
+}
+
 int	parse_cylinder(char *line, t_scene *scene)
 {
 	char		**parts;
 	t_cylinder	cy;
-	int			error;
 
 	parts = ft_split(line, ' ');
 	if (!parts || !parts[1] || !parts[2] || !parts[3]
-		|| !parts[4] || !parts[5] || parts[6])
-		return (free_split(parts), error_exit("Cylinder: invalid format"), 0);
-	if (!parse_vector(parts[1], &cy.center)
-		|| !parse_vector(parts[2], &cy.axis)
-		|| !parse_color(parts[5], &cy.color))
-		return (free_split(parts), error_exit("Cylinder: invalid data"), 0);
-	if (!validate_normalized(cy.axis))
+		|| !parts[4] || !parts[5])
 		return (free_split(parts),
-			error_exit("Cylinder: axis not normalized"), 0);
-	cy.axis = vec_normalize(cy.axis);
-	cy.diameter = parse_double(parts[3], &error);
-	cy.height = parse_double(parts[4], &error);
-	if (error || cy.diameter <= 0 || cy.height <= 0)
+			error_exit("Cylinder: invalid format"), 0);
+	if (parts[6] && (ft_strncmp(parts[6], "checker", 8)
+			|| parts[7]))
 		return (free_split(parts),
-			error_exit("Cylinder dimensions must be > 0"), 0);
-	cy.radius = cy.diameter / 2.0;
-	cy.material = 0;
+			error_exit("Cylinder: invalid format"), 0);
+	if (!fill_cylinder(parts, &cy))
+		return (free_split(parts), 0);
 	free_split(parts);
 	return (add_cylinder(scene, cy));
 }

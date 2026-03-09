@@ -25,6 +25,9 @@ t_hit	create_body_hit(t_ray ray, t_cylinder cy, double t)
 	hit.normal = vec_normalize(vec_subtract(hit.point, proj_point));
 	hit.color = cy.color;
 	hit.material = cy.material;
+	hit.type = HIT_CYLINDER;
+	hit.obj_center = cy.center;
+	hit.obj_axis = cy.axis;
 	return (hit);
 }
 
@@ -42,12 +45,31 @@ int	check_body_hit(t_ray ray, t_cylinder cy, double t, double cl)
 	return (h >= 0.0 && h <= cy.height);
 }
 
+static t_hit	fill_cap_hit(t_cylinder cy, t_vector pt, double t,
+		t_ray ray)
+{
+	t_hit	hit;
+
+	hit.hit = 1;
+	hit.t = t;
+	hit.point = pt;
+	hit.normal = cy.axis;
+	if (vec_dot(hit.normal, ray.direction) > 0)
+		hit.normal = vec_negate(hit.normal);
+	hit.color = cy.color;
+	hit.material = cy.material;
+	hit.type = HIT_CYLINDER;
+	hit.obj_center = cy.center;
+	hit.obj_axis = cy.axis;
+	return (hit);
+}
+
 t_hit	check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl)
 {
 	double		denom;
 	double		t;
 	t_vector	diff;
-	t_hit		hit;
+	t_vector	point;
 
 	denom = vec_dot(ray.direction, cy.axis);
 	if (fabs(denom) < EPSILON)
@@ -56,15 +78,8 @@ t_hit	check_cap(t_ray ray, t_cylinder cy, t_vector cap, double cl)
 	t = vec_dot(diff, cy.axis) / denom;
 	if (t < EPSILON || t >= cl)
 		return (create_no_hit());
-	hit.point = ray_at(ray, t);
-	if (vec_distance(hit.point, cap) > cy.radius)
+	point = ray_at(ray, t);
+	if (vec_distance(point, cap) > cy.radius)
 		return (create_no_hit());
-	hit.hit = 1;
-	hit.t = t;
-	hit.normal = cy.axis;
-	if (vec_dot(hit.normal, ray.direction) > 0)
-		hit.normal = vec_negate(hit.normal);
-	hit.color = cy.color;
-	hit.material = cy.material;
-	return (hit);
+	return (fill_cap_hit(cy, point, t, ray));
 }
